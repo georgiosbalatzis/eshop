@@ -360,3 +360,461 @@ body {
         height: 20px;
     }
 }
+
+/* Add these mobile optimizations to style.css */
+
+/* Mobile-First Responsive Adjustments */
+@media (max-width: 768px) {
+    /* Header & Navigation */
+    header {
+        padding: 0.75rem;
+    }
+
+    header .logo a {
+        font-size: 1.5rem; /* Smaller logo text */
+    }
+
+    nav {
+        position: relative;
+    }
+
+    /* Compressed nav links on mobile */
+    header nav {
+        gap: 0.75rem;
+    }
+
+    header nav a svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        flex-direction: column;
+        padding: 2rem 1rem;
+    }
+
+    .hero-section > div {
+        width: 100%;
+        padding-right: 0;
+        margin-bottom: 2rem;
+    }
+
+    .hero-section h1 {
+        font-size: 2.25rem;
+        text-align: center;
+    }
+
+    .hero-section p {
+        text-align: center;
+    }
+
+    .hero-section a {
+        display: block;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    /* Main Content Layout */
+    #products {
+        flex-direction: column;
+    }
+
+    #categoryFilters {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    #productGrid {
+        width: 100%;
+        grid-template-columns: repeat(1, 1fr); /* Single column for phones */
+    }
+
+    /* Make product cards larger on mobile */
+    .product-card {
+        margin-bottom: 1.5rem;
+    }
+
+    .product-card img {
+        height: 180px; /* Larger product images on mobile */
+    }
+
+    /* Footer */
+    footer .grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    /* Social media icons */
+    .social-media-icons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Larger touch targets for social media icons */
+    .social-media-icons a {
+        padding: 0.5rem;
+    }
+
+    /* Cart, Checkout, Product Details */
+    .grid.md\:grid-cols-2 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Back-to-top button position */
+    #back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+    }
+
+    /* Recently viewed section */
+    #recently-viewed-container .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    /* Extremely small screens */
+    header {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+    }
+
+    header nav {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    /* Hidden text labels, only icons */
+    .nav-text {
+        display: none;
+    }
+
+    /* Product grid full width items */
+    #productGrid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Checkout form */
+    .grid.grid-cols-3 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Social media icons for tiny screens */
+    .social-media-icons {
+        gap: 0.5rem;
+    }
+}
+
+/* Better Hamburger Menu for Very Small Screens */
+@media (max-width: 380px) {
+    .mobile-menu-wrapper {
+        display: block;
+    }
+
+    .mobile-menu-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: var(--racing-green);
+        border: none;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 5rem;
+        right: 1rem;
+        z-index: 50;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--racing-green);
+        padding: 0.5rem;
+        display: flex;
+        justify-content: space-around;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 40;
+    }
+}
+
+/* Add these mobile checkout optimizations to style.css */
+
+/* Mobile Checkout Form Improvements */
+@media (max-width: 768px) {
+    /* Checkout page specific styles */
+
+    /* Make form inputs larger and easier to tap on mobile */
+    .checkout-form input,
+    .checkout-form select,
+    .checkout-form textarea {
+        padding: 12px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+        margin-bottom: 12px;
+    }
+
+    /* Larger tap targets for shipping options */
+    .shipping-option {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    /* Reorder checkout sections on mobile */
+    .checkout-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .checkout-container .order-summary {
+        order: 1; /* Show summary first on mobile */
+        margin-bottom: 20px;
+    }
+
+    .checkout-container .shipping-form {
+        order: 2;
+    }
+
+    /* Cart page specific styles */
+
+    /* Larger buttons in cart */
+    .cart-actions button {
+        padding: 12px 16px;
+        font-size: 16px;
+    }
+
+    /* Cart item layout for mobile */
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cart-item-details {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .cart-item-image {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Quantity selector for mobile */
+    .quantity-input {
+        margin: 12px 0;
+    }
+
+    .quantity-input button {
+        width: 36px;
+        height: 36px;
+    }
+
+    /* Payment buttons on mobile */
+    #paypal-button-container {
+        width: 100%;
+    }
+
+    /* Fix for long product names */
+    .product-name {
+        word-break: break-word;
+        hyphens: auto;
+    }
+}
+
+/* Special styles for forms on iOS */
+@supports (-webkit-overflow-scrolling: touch) {
+    input,
+    select,
+    textarea {
+        font-size: 16px !important; /* Prevents iOS zoom */
+    }
+
+    .checkout-form input,
+    .checkout-form select {
+        -webkit-appearance: none;
+        border-radius: 4px;
+    }
+}
+
+/* Custom radio buttons and checkboxes for touch */
+.custom-radio input[type="radio"],
+.custom-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.custom-radio .radio-label,
+.custom-checkbox .checkbox-label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 25px;
+}
+
+.custom-radio .radio-label:before,
+.custom-checkbox .checkbox-label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    border: 2px solid var(--gold-accent, #CBA135);
+    background: var(--racing-white, #FAFAFA);
+}
+
+.custom-radio .radio-label:before {
+    border-radius: 50%;
+}
+
+.custom-radio input[type="radio"]:checked + .radio-label:after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--racing-green, #003B2B);
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-label:after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    width: 9px;
+    height: 15px;
+    border: solid var(--racing-green, #003B2B);
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+/* Mobile sticky cart total bar */
+.sticky-cart-total {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--racing-green, #003B2B);
+    color: var(--racing-white, #FAFAFA);
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 30;
+    transition: transform 0.3s ease;
+}
+
+.sticky-cart-total.hidden {
+    transform: translateY(100%);
+}
+
+.sticky-cart-total.with-mobile-nav {
+    bottom: 60px; /* Adjust based on mobile nav height */
+}
+
+.sticky-cart-total .total-text {
+    font-weight: bold;
+}
+
+.sticky-cart-total .total-amount {
+    color: var(--gold-accent, #CBA135);
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+/* Add this to style.css for responsive social media section */
+
+/* Social Media Icons Responsive Styling */
+.social-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .social-icons {
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .social-icons a {
+        /* Larger tap targets on mobile */
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-icons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+
+    .social-icons a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .social-icons a svg {
+        margin-bottom: 0.25rem;
+    }
+
+    .social-icons a .icon-label {
+        font-size: 0.75rem;
+        display: block;
+    }
+}
+
+/* Updated Social Media Icons Section in Footer */
+.footer-social-section {
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .footer-social-section {
+        border-top: 1px solid var(--pit-lane-gray, #6A6A6A);
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
+    }
+}
+
+/* Social Media Platform Specific Colors on Hover */
+.social-youtube:hover {
+    color: #FF0000 !important;
+}
+
+.social-facebook:hover {
+    color: #1877F2 !important;
+}
+
+.social-instagram:hover {
+    color: #E4405F !important;
+}
+
+.social-tiktok:hover {
+    color: #000000 !important;
+    text-shadow: 0 0 2px #69C9D0;
+}
+
+.social-email:hover {
+    color: #D44638 !important;
+}
+
+.social-spotify:hover {
+    color: #1DB954 !important;
+}

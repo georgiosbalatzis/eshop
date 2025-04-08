@@ -304,5 +304,96 @@
   // Initial render
   renderCheckoutSummary();
 </script>
+<!-- Add this code to the bottom of all HTML files, right before the closing </body> tag -->
+
+<!-- Mobile Navigation for Small Screens -->
+<div class="mobile-menu-wrapper hidden md:hidden">
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-nav">
+    <a href="https://f1stories.gr" class="flex flex-col items-center text-racing-white hover:text-gold-accent transition-colors p-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+      <span class="text-xs mt-1">Home</span>
+    </a>
+    <a href="cart.html" class="flex flex-col items-center text-racing-white hover:text-gold-accent transition-colors p-2 relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+      <span class="text-xs mt-1">Cart</span>
+      <span class="cart-count absolute -top-1 -right-1 bg-racing-red text-racing-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+    </a>
+    <a href="wishlist.html" class="flex flex-col items-center text-racing-white hover:text-gold-accent transition-colors p-2 relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+      <span class="text-xs mt-1">Wishlist</span>
+      <span id="mobile-wishlist-count" class="absolute -top-1 -right-1 bg-racing-red text-racing-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+    </a>
+    <button id="mobileDarkModeToggle" class="flex flex-col items-center text-racing-white hover:text-gold-accent transition-colors p-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+      <span class="text-xs mt-1">Theme</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+  // Mobile Menu Initialization
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check window width and show mobile menu if needed
+    function checkMobileMenu() {
+      const mobileMenuWrapper = document.querySelector('.mobile-menu-wrapper');
+      if (!mobileMenuWrapper) return;
+
+      if (window.innerWidth <= 380) {
+        mobileMenuWrapper.classList.remove('hidden');
+      } else {
+        mobileMenuWrapper.classList.add('hidden');
+      }
+    }
+
+    // Initial check
+    checkMobileMenu();
+
+    // Check on resize
+    window.addEventListener('resize', checkMobileMenu);
+
+    // Setup mobile dark mode toggle
+    const mobileDarkModeToggle = document.getElementById('mobileDarkModeToggle');
+    if (mobileDarkModeToggle) {
+      mobileDarkModeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+      });
+    }
+
+    // Sync mobile wishlist count with main wishlist count
+    function updateMobileWishlistCount() {
+      const wishlistCount = document.getElementById('wishlist-count');
+      const mobileWishlistCount = document.getElementById('mobile-wishlist-count');
+
+      if (wishlistCount && mobileWishlistCount) {
+        mobileWishlistCount.textContent = wishlistCount.textContent;
+        mobileWishlistCount.classList.toggle('hidden', wishlistCount.classList.contains('hidden'));
+      }
+    }
+
+    // Initial update
+    updateMobileWishlistCount();
+
+    // Update when main count changes (using MutationObserver)
+    const wishlistCount = document.getElementById('wishlist-count');
+    if (wishlistCount) {
+      const observer = new MutationObserver(updateMobileWishlistCount);
+      observer.observe(wishlistCount, {
+        attributes: true,
+        childList: true,
+        characterData: true
+      });
+    }
+  });
+</script>
 </body>
 </html>

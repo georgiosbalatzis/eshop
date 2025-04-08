@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ebafe7e-f400-4536-91d8-f208df655f09" name="Changes" comment="Green color british racing">
+    <list default="true" id="5ebafe7e-f400-4536-91d8-f208df655f09" name="Changes" comment="Updated social handles">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/cart.html" afterDir="false" />
@@ -92,7 +92,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744124076458</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Updated social handles">
+      <option name="closed" value="true" />
+      <created>1744126464104</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1744126464104</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,6 +120,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First working thing" />
     <MESSAGE value="Green color british racing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Green color british racing" />
+    <MESSAGE value="Updated social handles" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated social handles" />
   </component>
 </project>

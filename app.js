@@ -262,6 +262,8 @@ function filterProducts() {
 }
 
 // Render Products
+// Update the renderProducts function in app.js to be more mobile-friendly
+
 function renderProducts(productsToRender = state.products) {
     try {
         const productGrid = document.getElementById('productGrid');
@@ -298,57 +300,62 @@ function renderProducts(productsToRender = state.products) {
                 relative
                 transition-all
                 duration-300
+                flex
+                flex-col
             `;
 
             // Check if product is in wishlist
             const isInWishlist = state.wishlist.some(item => item.id === product.id);
 
+            // Mobile-optimized product card
             productCard.innerHTML = `
                 <div class="relative group">
-                    <img 
-                        src="${product.imageUrl}" 
-                        alt="${product.name}" 
-                        class="w-full h-48 object-cover group-hover:brightness-105 transition-all duration-300"
-                    >
+                    <a href="product-details.html?id=${product.id}" class="block">
+                        <img 
+                            src="${product.imageUrl}" 
+                            alt="${product.name}" 
+                            class="w-full h-48 md:h-40 object-cover group-hover:brightness-105 transition-all duration-300"
+                            loading="lazy"
+                        >
+                    </a>
                     <div class="absolute top-0 left-0 w-full h-1 bg-racing-green"></div>
                     <button 
-                        class="wishlist-toggle absolute top-2 right-2 ${isInWishlist ? 'text-racing-red' : 'text-pit-lane-gray'} hover:text-racing-red transition-colors"
+                        class="wishlist-toggle absolute top-2 right-2 ${isInWishlist ? 'text-racing-red' : 'text-pit-lane-gray'} hover:text-racing-red transition-colors p-2"
                         data-product-id="${product.id}"
                         onclick="toggleWishlist('${product.id}')"
+                        aria-label="${isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="${isInWishlist ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                     </button>
                     <div class="absolute bottom-0 left-0 w-full px-3 py-2 bg-gradient-to-t from-carbon-gray to-transparent">
-                        <span class="text-white text-sm font-medium rounded-full bg-racing-green px-2 py-1">${product.category}</span>
+                        <span class="text-white text-xs md:text-sm font-medium rounded-full bg-racing-green px-2 py-1">${product.category}</span>
                     </div>
                 </div>
-                <div class="p-4">
-                    <h3 class="text-racing-green font-bold text-lg mb-1">${product.name}</h3>
-                    <p class="text-asphalt-gray text-sm mb-3 line-clamp-2">${product.description.substring(0, 75)}${product.description.length > 75 ? '...' : ''}</p>
+                <div class="p-3 md:p-4 flex-grow flex flex-col">
+                    <a href="product-details.html?id=${product.id}" class="block">
+                        <h3 class="text-racing-green font-bold text-base md:text-lg mb-1 line-clamp-1">${product.name}</h3>
+                    </a>
+                    <p class="text-asphalt-gray text-xs md:text-sm mb-2 line-clamp-2 flex-grow">${product.description.substring(0, 75)}${product.description.length > 75 ? '...' : ''}</p>
                     
-                    <div class="text-sm text-pit-lane-gray mb-3 grid grid-cols-2 gap-2">
-                        ${product.details.material !== 'N/A' ? `<div><span class="text-racing-green font-medium">Material:</span> ${product.details.material}</div>` : ''}
-                        ${product.details.color !== 'N/A' ? `<div><span class="text-racing-green font-medium">Color:</span> ${product.details.color}</div>` : ''}
-                        ${product.details.size !== 'N/A' ? `<div><span class="text-racing-green font-medium">Size:</span> ${product.details.size}</div>` : ''}
-                    </div>
-                    
-                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-pit-lane-gray border-opacity-20">
-                        <span class="text-gold-accent font-bold text-lg">$${product.price.toFixed(2)}</span>
+                    <div class="flex justify-between items-center mt-auto pt-2 border-t border-pit-lane-gray border-opacity-20">
+                        <span class="text-gold-accent font-bold text-base md:text-lg">$${product.price.toFixed(2)}</span>
                         <button 
                             onclick="addToCart('${product.id}')" 
                             class="
                                 bg-racing-green 
                                 text-racing-white 
-                                px-4 
-                                py-2 
+                                px-3
+                                py-1.5
                                 rounded 
                                 hover:bg-gold-accent 
                                 transition-colors
-                                text-sm
+                                text-xs
+                                md:text-sm
                                 font-medium
                             "
+                            aria-label="Add ${product.name} to cart"
                         >
                             Add to Cart
                         </button>
@@ -704,6 +711,342 @@ function addToRecentlyViewed(productId) {
     // Render if on a page with recently viewed section
     renderRecentlyViewed();
 }
+
+// Add this code to app.js to enhance mobile interactions
+
+// Mobile Interaction Enhancements
+function initMobileOptimizations() {
+    // Only run these optimizations on mobile devices
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) return;
+
+    // Add touch-friendly class to the body
+    document.body.classList.add('touch-device');
+
+    // Prevent zooming on input focus (iOS)
+    const metaViewport = document.querySelector('meta[name="viewport"]');
+    if (metaViewport) {
+        metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
+    }
+
+    // Add sticky cart total on cart page
+    if (window.location.pathname.includes('cart.html')) {
+        createStickyCartTotal();
+    }
+
+    // Improve tap targets
+    enlargeTapTargets();
+
+    // Optimize scrolling
+    improveScrollPerformance();
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', handleOrientationChange);
+}
+
+// Create sticky cart total for mobile devices
+function createStickyCartTotal() {
+    const cartTotal = document.getElementById('cartTotal');
+    if (!cartTotal) return;
+
+    // Create sticky total
+    const stickyTotal = document.createElement('div');
+    stickyTotal.className = 'sticky-cart-total';
+    stickyTotal.innerHTML = `
+    <div class="total-text">Total:</div>
+    <div class="total-amount">${cartTotal.textContent}</div>
+  `;
+
+    // Check if mobile navigation is present
+    const mobileNav = document.querySelector('.mobile-nav');
+    if (mobileNav) {
+        stickyTotal.classList.add('with-mobile-nav');
+    }
+
+    document.body.appendChild(stickyTotal);
+
+    // Update sticky total when main total changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'characterData' || mutation.type === 'childList') {
+                stickyTotal.querySelector('.total-amount').textContent = cartTotal.textContent;
+            }
+        });
+    });
+
+    observer.observe(cartTotal, {
+        characterData: true,
+        childList: true,
+        subtree: true
+    });
+
+    // Hide when scrolling up, show when scrolling down
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > 300) {
+            // Scrolling down
+            stickyTotal.classList.remove('hidden');
+        } else if (scrollTop < lastScrollTop && scrollTop < document.body.scrollHeight - window.innerHeight - 100) {
+            // Scrolling up (but not at bottom)
+            stickyTotal.classList.add('hidden');
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }, { passive: true });
+}
+
+// Enlarge tap targets for better mobile usability
+function enlargeTapTargets() {
+    // Make all buttons at least 44x44px (Apple's recommended minimum)
+    const smallButtons = document.querySelectorAll('button, .btn, [role="button"]');
+    smallButtons.forEach(button => {
+        const rect = button.getBoundingClientRect();
+        if (rect.width < 44 || rect.height < 44) {
+            button.style.minWidth = '44px';
+            button.style.minHeight = '44px';
+
+            // Add padding to maintain layout
+            const computedStyle = window.getComputedStyle(button);
+            const currentPaddingX = parseInt(computedStyle.paddingLeft) + parseInt(computedStyle.paddingRight);
+            const currentPaddingY = parseInt(computedStyle.paddingTop) + parseInt(computedStyle.paddingBottom);
+
+            if (rect.width < 44 && currentPaddingX < 20) {
+                button.style.paddingLeft = '10px';
+                button.style.paddingRight = '10px';
+            }
+
+            if (rect.height < 44 && currentPaddingY < 20) {
+                button.style.paddingTop = '10px';
+                button.style.paddingBottom = '10px';
+            }
+        }
+    });
+
+    // Add space between clickable elements
+    const clickableElements = document.querySelectorAll('a, button, input[type="checkbox"], input[type="radio"], select');
+    clickableElements.forEach(element => {
+        const style = window.getComputedStyle(element);
+        if (parseFloat(style.marginBottom) < 8) {
+            element.style.marginBottom = '8px';
+        }
+    });
+}
+
+// Improve scroll performance on mobile
+function improveScrollPerformance() {
+    // Add will-change property to elements that animate on scroll
+    const animatedElements = document.querySelectorAll('.product-card, .hero-section, img');
+    animatedElements.forEach(element => {
+        element.style.willChange = 'transform';
+    });
+
+    // Use passive event listeners for scroll events
+    // Use passive event listeners for scroll events
+    const scrollableElements = document.querySelectorAll('.overflow-auto, .overflow-y-auto');
+    scrollableElements.forEach(element => {
+        element.addEventListener('scroll', () => {}, { passive: true });
+    });
+
+    // Optimize images for mobile
+    const images = document.querySelectorAll('img:not([loading])');
+    images.forEach(img => {
+        // Add lazy loading to images
+        img.setAttribute('loading', 'lazy');
+
+        // Add intrinsic size to reduce layout shifts
+        if (!img.hasAttribute('width') && !img.hasAttribute('height')) {
+            const width = img.clientWidth;
+            const height = img.clientHeight;
+            if (width && height) {
+                img.style.aspectRatio = `${width} / ${height}`;
+            }
+        }
+    });
+}
+
+// Handle orientation changes on mobile devices
+function handleOrientationChange() {
+    // Force a repaint to fix iOS rendering issues
+    document.body.style.display = 'none';
+    document.body.offsetHeight; // Trigger a reflow
+    document.body.style.display = '';
+
+    // Readjust the product grid
+    const productGrid = document.getElementById('productGrid');
+    if (productGrid) {
+        const orientation = (window.innerWidth > window.innerHeight) ? 'landscape' : 'portrait';
+
+        if (orientation === 'landscape') {
+            // In landscape, show more items in a row
+            productGrid.classList.remove('grid-cols-1');
+            productGrid.classList.add('grid-cols-2');
+
+            if (window.innerWidth > 640) {
+                productGrid.classList.remove('grid-cols-2');
+                productGrid.classList.add('grid-cols-3');
+            }
+        } else {
+            // In portrait on small screens, show single column
+            if (window.innerWidth < 480) {
+                productGrid.classList.remove('grid-cols-2', 'grid-cols-3');
+                productGrid.classList.add('grid-cols-1');
+            }
+        }
+    }
+
+    // Adjust the height of the recently viewed section
+    adjustRecentlyViewedSection();
+}
+
+// Adjust the recently viewed section for mobile
+function adjustRecentlyViewedSection() {
+    const container = document.getElementById('recently-viewed-container');
+    if (!container) return;
+
+    const items = container.querySelectorAll('.grid > a');
+    if (!items.length) return;
+
+    // On very small screens, show fewer items with horizontal scroll
+    if (window.innerWidth < 480) {
+        const grid = container.querySelector('.grid');
+        if (grid) {
+            grid.classList.remove('grid');
+            grid.classList.add('flex', 'overflow-x-auto', 'pb-4', 'space-x-3', 'snap-x');
+
+            items.forEach(item => {
+                item.classList.add('flex-shrink-0', 'w-40', 'snap-start');
+            });
+        }
+    } else {
+        // Revert to grid on larger screens
+        const flex = container.querySelector('.flex');
+        if (flex) {
+            flex.classList.remove('flex', 'overflow-x-auto', 'pb-4', 'space-x-3', 'snap-x');
+            flex.classList.add('grid', 'grid-cols-2', 'md:grid-cols-4', 'gap-4');
+
+            items.forEach(item => {
+                item.classList.remove('flex-shrink-0', 'w-40', 'snap-start');
+            });
+        }
+    }
+}
+
+// Implement pull-to-refresh functionality for mobile
+function setupPullToRefresh() {
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    document.addEventListener('touchstart', function(e) {
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+        touchEndY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+        const pullDistance = touchEndY - touchStartY;
+        const atTop = window.scrollY === 0;
+
+        // If pulled down significantly while at the top of the page
+        if (atTop && pullDistance > 100) {
+            // Show refreshing indicator
+            const refreshIndicator = document.createElement('div');
+            refreshIndicator.className = 'refresh-indicator';
+            refreshIndicator.innerHTML = `
+        <div class="flex items-center justify-center py-4">
+          <svg class="animate-spin h-6 w-6 text-racing-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="ml-2 text-racing-green">Refreshing...</span>
+        </div>
+      `;
+
+            document.body.prepend(refreshIndicator);
+
+            // Refresh content after a brief delay
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+    }, { passive: true });
+}
+
+// Add mobile-specific swipe gestures
+function setupSwipeGestures() {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    // Setup swipe detection
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].clientX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const swipeDistance = touchEndX - touchStartX;
+
+        // Minimum distance for a swipe
+        if (Math.abs(swipeDistance) < 100) return;
+
+        // Handle swipe on product cards
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const touchY = e.changedTouches[0].clientY;
+
+            // Check if swipe happened over this card
+            if (touchY >= rect.top && touchY <= rect.bottom) {
+                if (swipeDistance > 0) {
+                    // Swipe right: Add to wishlist
+                    const productId = card.querySelector('[data-product-id]').dataset.productId;
+                    toggleWishlist(productId);
+                } else {
+                    // Swipe left: Add to cart
+                    const productId = card.querySelector('[data-product-id]').dataset.productId;
+                    addToCart(productId);
+                }
+            }
+        });
+
+        // Handle swipe in cart page
+        if (window.location.pathname.includes('cart.html')) {
+            const cartItems = document.querySelectorAll('.cart-item');
+            cartItems.forEach((item, index) => {
+                const rect = item.getBoundingClientRect();
+                const touchY = e.changedTouches[0].clientY;
+
+                // Check if swipe happened over this item
+                if (touchY >= rect.top && touchY <= rect.bottom) {
+                    if (swipeDistance < 0) {
+                        // Swipe left: Remove from cart
+                        removeFromCart(index);
+                    }
+                }
+            });
+        }
+    }
+}
+
+// Initialize all mobile optimizations
+document.addEventListener('DOMContentLoaded', function() {
+    // Only run mobile optimizations on actual mobile devices or small screens
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+    if (isMobile) {
+        initMobileOptimizations();
+        setupPullToRefresh();
+        setupSwipeGestures();
+
+        // Add to the existing app initialization
+        console.log('Mobile optimizations initialized');
+    }
+});
 
 // Initialize Application
 function initApp() {
