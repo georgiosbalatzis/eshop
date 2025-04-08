@@ -19,7 +19,7 @@ function logError(message, error = null) {
         (() => {
             const el = document.createElement('div');
             el.id = 'error-container';
-            el.className = 'fixed top-0 left-0 right-0 bg-red-500 text-white p-4 text-center z-50';
+            el.className = 'fixed top-0 left-0 right-0 bg-racing-red text-racing-white p-4 text-center z-50';
             document.body.prepend(el);
             return el;
         })();
@@ -168,10 +168,10 @@ async function fetchProducts() {
         const productGrid = document.getElementById('productGrid');
         if (productGrid) {
             productGrid.innerHTML = `
-                <div class="col-span-full text-center text-red-500">
+                <div class="col-span-full text-center text-racing-red">
                     <h2 class="text-2xl font-bold mb-4">Failed to Load Products</h2>
                     <p class="mb-4">${error.message}</p>
-                    <button onclick="fetchProducts()" class="bg-brand-gold text-white px-4 py-2 rounded">
+                    <button onclick="fetchProducts()" class="bg-racing-green text-racing-white px-4 py-2 rounded hover:bg-gold-accent transition-colors">
                         Try Again
                     </button>
                 </div>
@@ -196,14 +196,14 @@ function renderCategories() {
         state.categories.forEach(category => {
             const categoryDiv = document.createElement('div');
             categoryDiv.innerHTML = `
-                <label class="flex items-center text-brand-white">
+                <label class="flex items-center text-racing-white cursor-pointer group">
                     <input 
                         type="checkbox" 
                         name="category" 
                         value="${category}" 
-                        class="mr-2 category-filter"
+                        class="mr-2 category-filter accent-gold-accent"
                     >
-                    ${category}
+                    <span class="group-hover:text-gold-accent transition-colors">${category}</span>
                 </label>
             `;
             filterContainer.appendChild(categoryDiv);
@@ -262,7 +262,6 @@ function filterProducts() {
 }
 
 // Render Products
-// Render Products with Racing Theme
 function renderProducts(productsToRender = state.products) {
     try {
         const productGrid = document.getElementById('productGrid');
@@ -275,87 +274,87 @@ function renderProducts(productsToRender = state.products) {
 
         if (productsToRender.length === 0) {
             productGrid.innerHTML = `
-        <div class="col-span-full text-center py-12">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-pit-lane-gray mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-          </svg>
-          <p class="text-2xl text-racing-green font-bold">No F1 Gear Found</p>
-          <p class="text-lg mt-2 text-asphalt-gray">Try adjusting your search or filters</p>
-        </div>
-      `;
+                <div class="col-span-full text-center py-12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-pit-lane-gray mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                    <p class="text-2xl text-racing-green font-bold">No F1 Gear Found</p>
+                    <p class="text-lg mt-2 text-asphalt-gray">Try adjusting your search or filters</p>
+                </div>
+            `;
             return;
         }
 
         productsToRender.forEach(product => {
             const productCard = document.createElement('div');
             productCard.className = `
-        product-card
-        bg-racing-white 
-        rounded-lg 
-        overflow-hidden 
-        shadow-lg 
-        border
-        hover:border-gold-accent
-        relative
-        transition-all
-        duration-300
-      `;
+                product-card
+                bg-racing-white 
+                rounded-lg 
+                overflow-hidden 
+                shadow-lg 
+                border
+                hover:border-gold-accent
+                relative
+                transition-all
+                duration-300
+            `;
 
             // Check if product is in wishlist
             const isInWishlist = state.wishlist.some(item => item.id === product.id);
 
             productCard.innerHTML = `
-        <div class="relative group">
-          <img 
-            src="${product.imageUrl}" 
-            alt="${product.name}" 
-            class="w-full h-48 object-cover group-hover:brightness-105 transition-all duration-300"
-          >
-          <div class="absolute top-0 left-0 w-full h-1 bg-racing-green"></div>
-          <button 
-            class="wishlist-toggle absolute top-2 right-2 ${isInWishlist ? 'text-racing-red' : 'text-pit-lane-gray'} hover:text-racing-red transition-colors"
-            data-product-id="${product.id}"
-            onclick="toggleWishlist('${product.id}')"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="${isInWishlist ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-          </button>
-          <div class="absolute bottom-0 left-0 w-full px-3 py-2 bg-gradient-to-t from-carbon-gray to-transparent">
-            <span class="text-white text-sm font-medium rounded-full bg-racing-green px-2 py-1">${product.category}</span>
-          </div>
-        </div>
-        <div class="p-4">
-          <h3 class="text-racing-green font-bold text-lg mb-1">${product.name}</h3>
-          <p class="text-asphalt-gray text-sm mb-3 line-clamp-2">${product.description.substring(0, 75)}${product.description.length > 75 ? '...' : ''}</p>
-          
-          <div class="text-sm text-pit-lane-gray mb-3 grid grid-cols-2 gap-2">
-            ${product.details.material !== 'N/A' ? `<div><span class="text-racing-green font-medium">Material:</span> ${product.details.material}</div>` : ''}
-            ${product.details.color !== 'N/A' ? `<div><span class="text-racing-green font-medium">Color:</span> ${product.details.color}</div>` : ''}
-            ${product.details.size !== 'N/A' ? `<div><span class="text-racing-green font-medium">Size:</span> ${product.details.size}</div>` : ''}
-          </div>
-          
-          <div class="flex justify-between items-center mt-4 pt-4 border-t border-pit-lane-gray border-opacity-20">
-            <span class="text-gold-accent font-bold text-lg">$${product.price.toFixed(2)}</span>
-            <button 
-              onclick="addToCart('${product.id}')" 
-              class="
-                bg-racing-green 
-                text-racing-white 
-                px-4 
-                py-2 
-                rounded 
-                hover:bg-gold-accent 
-                transition-colors
-                text-sm
-                font-medium
-              "
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      `;
+                <div class="relative group">
+                    <img 
+                        src="${product.imageUrl}" 
+                        alt="${product.name}" 
+                        class="w-full h-48 object-cover group-hover:brightness-105 transition-all duration-300"
+                    >
+                    <div class="absolute top-0 left-0 w-full h-1 bg-racing-green"></div>
+                    <button 
+                        class="wishlist-toggle absolute top-2 right-2 ${isInWishlist ? 'text-racing-red' : 'text-pit-lane-gray'} hover:text-racing-red transition-colors"
+                        data-product-id="${product.id}"
+                        onclick="toggleWishlist('${product.id}')"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="${isInWishlist ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </button>
+                    <div class="absolute bottom-0 left-0 w-full px-3 py-2 bg-gradient-to-t from-carbon-gray to-transparent">
+                        <span class="text-white text-sm font-medium rounded-full bg-racing-green px-2 py-1">${product.category}</span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-racing-green font-bold text-lg mb-1">${product.name}</h3>
+                    <p class="text-asphalt-gray text-sm mb-3 line-clamp-2">${product.description.substring(0, 75)}${product.description.length > 75 ? '...' : ''}</p>
+                    
+                    <div class="text-sm text-pit-lane-gray mb-3 grid grid-cols-2 gap-2">
+                        ${product.details.material !== 'N/A' ? `<div><span class="text-racing-green font-medium">Material:</span> ${product.details.material}</div>` : ''}
+                        ${product.details.color !== 'N/A' ? `<div><span class="text-racing-green font-medium">Color:</span> ${product.details.color}</div>` : ''}
+                        ${product.details.size !== 'N/A' ? `<div><span class="text-racing-green font-medium">Size:</span> ${product.details.size}</div>` : ''}
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-pit-lane-gray border-opacity-20">
+                        <span class="text-gold-accent font-bold text-lg">$${product.price.toFixed(2)}</span>
+                        <button 
+                            onclick="addToCart('${product.id}')" 
+                            class="
+                                bg-racing-green 
+                                text-racing-white 
+                                px-4 
+                                py-2 
+                                rounded 
+                                hover:bg-gold-accent 
+                                transition-colors
+                                text-sm
+                                font-medium
+                            "
+                        >
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `;
             productGrid.appendChild(productCard);
         });
     } catch (error) {
@@ -363,58 +362,113 @@ function renderProducts(productsToRender = state.products) {
     }
 }
 
-// Filter Products
-function filterProducts() {
-    try {
-        const selectedCategories = Array.from(
-            document.querySelectorAll('.category-filter:checked')
-        ).map(el => el.value);
+// Add to cart with enhanced notification and global counter update
+function addToCart(productId) {
+    const product = state.products.find(p => p.id === productId);
 
-        const filteredProducts = selectedCategories.length
-            ? state.products.filter(product =>
-                selectedCategories.includes(product.category)
-            )
-            : state.products;
+    if (!product) {
+        logError(`Product with ID ${productId} not found`);
+        return;
+    }
 
-        renderProducts(filteredProducts);
-    } catch (error) {
-        logError('Failed to filter products', error);
+    // Check if product already in cart
+    const existingProductIndex = state.cart.findIndex(item => item.id === productId);
+
+    if (existingProductIndex > -1) {
+        // Increment quantity
+        state.cart[existingProductIndex].quantity += 1;
+    } else {
+        // Add new product
+        state.cart.push({ ...product, quantity: 1 });
+    }
+
+    // Update localStorage
+    localStorage.setItem('cart', JSON.stringify(state.cart));
+
+    // Update cart count - both specific element and global counters
+    const cartCountEl = document.getElementById('cart-count');
+    if (cartCountEl) {
+        const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountEl.textContent = totalItems;
+        cartCountEl.classList.toggle('hidden', totalItems === 0);
+    }
+
+    // Call global counter update if available
+    if (typeof updateGlobalCartCounter === 'function') {
+        updateGlobalCartCounter();
+    }
+
+    // Show notification if function is available
+    if (typeof showNotification === 'function') {
+        showNotification(`Added ${product.name} to cart`, 'success');
+    } else {
+        // Fallback: Console log
+        console.log(`Added ${product.name} to cart`);
     }
 }
 
-// Render Categories
-function renderCategories() {
-    try {
-        const filterContainer = document.getElementById('filterContainer');
+// Add to cart with custom quantity
+function addToCartWithQuantity(productId, quantity = 1) {
+    const product = state.products.find(p => p.id === productId);
 
-        if (!filterContainer) {
-            throw new Error('Filter container not found');
+    if (!product) {
+        if (typeof showNotification === 'function') {
+            showNotification(`Product not found`, 'error');
         }
+        return;
+    }
 
-        filterContainer.innerHTML = '';
+    // Check if product already in cart
+    const existingProductIndex = state.cart.findIndex(item => item.id === productId);
 
-        state.categories.forEach(category => {
-            const categoryDiv = document.createElement('div');
-            categoryDiv.innerHTML = `
-        <label class="flex items-center text-racing-white cursor-pointer group">
-          <input 
-            type="checkbox" 
-            name="category" 
-            value="${category}" 
-            class="mr-2 category-filter accent-gold-accent"
-          >
-          <span class="group-hover:text-gold-accent transition-colors">${category}</span>
-        </label>
-      `;
-            filterContainer.appendChild(categoryDiv);
-        });
+    if (existingProductIndex > -1) {
+        // Update quantity
+        state.cart[existingProductIndex].quantity += quantity;
+    } else {
+        // Add new product
+        state.cart.push({ ...product, quantity: quantity });
+    }
 
-        // Add event listeners to category filters
-        document.querySelectorAll('.category-filter').forEach(checkbox => {
-            checkbox.addEventListener('change', filterProducts);
-        });
-    } catch (error) {
-        logError('Failed to render categories', error);
+    // Update localStorage
+    localStorage.setItem('cart', JSON.stringify(state.cart));
+
+    // Call global counter update if available
+    if (typeof updateGlobalCartCounter === 'function') {
+        updateGlobalCartCounter();
+    }
+
+    // Show notification
+    if (typeof showNotification === 'function') {
+        showNotification(`Added ${quantity} ${product.name} to cart`, 'success');
+    }
+}
+
+// Remove from cart function
+function removeFromCart(index) {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    // Save product info before removing for notification
+    const removedProduct = cart[index];
+
+    // Remove item
+    cart.splice(index, 1);
+
+    // Update localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Update UI
+    if (typeof renderCart === 'function') {
+        renderCart();
+    }
+
+    // Call global counter update if available
+    if (typeof updateGlobalCartCounter === 'function') {
+        updateGlobalCartCounter();
+    }
+
+    // Show notification if function is available
+    if (typeof showNotification === 'function' && removedProduct) {
+        showNotification(`Removed ${removedProduct.name} from cart`, 'info');
     }
 }
 
@@ -464,47 +518,14 @@ function toggleWishlist(productId) {
     }
 
     // Show notification
-    showNotification(
-        isInWishlist
-            ? `Removed ${product.name} from wishlist`
-            : `Added ${product.name} to wishlist`,
-        isInWishlist ? 'info' : 'success'
-    );
-}
-
-// Add to cart with enhanced notification
-function addToCart(productId) {
-    const product = state.products.find(p => p.id === productId);
-
-    if (!product) {
-        logError(`Product with ID ${productId} not found`);
-        return;
+    if (typeof showNotification === 'function') {
+        showNotification(
+            isInWishlist
+                ? `Removed ${product.name} from wishlist`
+                : `Added ${product.name} to wishlist`,
+            isInWishlist ? 'info' : 'success'
+        );
     }
-
-    // Check if product already in cart
-    const existingProductIndex = state.cart.findIndex(item => item.id === productId);
-
-    if (existingProductIndex > -1) {
-        // Increment quantity
-        state.cart[existingProductIndex].quantity += 1;
-    } else {
-        // Add new product
-        state.cart.push({ ...product, quantity: 1 });
-    }
-
-    // Update localStorage
-    localStorage.setItem('cart', JSON.stringify(state.cart));
-
-    // Update cart count
-    const cartCountEl = document.getElementById('cart-count');
-    if (cartCountEl) {
-        const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCountEl.textContent = totalItems;
-        cartCountEl.classList.toggle('hidden', totalItems === 0);
-    }
-
-    // Show notification
-    showNotification(`Added ${product.name} to cart`, 'success');
 }
 
 // Show notification
@@ -515,38 +536,38 @@ function showNotification(message, type = 'info') {
 
     const notification = document.createElement('div');
     notification.className = `
-    p-4 mb-3 rounded-lg shadow-lg flex items-center justify-between
-    ${type === 'success' ? 'bg-racing-green text-racing-white' : ''}
-    ${type === 'error' ? 'bg-racing-red text-racing-white' : ''}
-    ${type === 'info' ? 'bg-carbon-gray text-racing-white' : ''}
-    transform transition-all duration-300 translate-x-full opacity-0
-  `;
+        p-4 mb-3 rounded-lg shadow-lg flex items-center justify-between
+        ${type === 'success' ? 'bg-racing-green text-racing-white' : ''}
+        ${type === 'error' ? 'bg-racing-red text-racing-white' : ''}
+        ${type === 'info' ? 'bg-carbon-gray text-racing-white' : ''}
+        transform transition-all duration-300 translate-x-full opacity-0
+    `;
 
     notification.innerHTML = `
-    <div class="flex items-center">
-      ${type === 'success' ? `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-        </svg>
-      ` : ''}
-      ${type === 'error' ? `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-        </svg>
-      ` : ''}
-      ${type === 'info' ? `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-1 9a1 1 0 01-1-1v-4a1 1 0 112 0v4a1 1 0 01-1 1z" clip-rule="evenodd" />
-        </svg>
-      ` : ''}
-      <span>${message}</span>
-    </div>
-    <button class="ml-4 text-sm hover:text-gold-accent focus:outline-none" onclick="this.parentNode.remove()">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-      </svg>
-    </button>
-  `;
+        <div class="flex items-center">
+            ${type === 'success' ? `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            ` : ''}
+            ${type === 'error' ? `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            ` : ''}
+            ${type === 'info' ? `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-1 9a1 1 0 01-1-1v-4a1 1 0 112 0v4a1 1 0 01-1 1z" clip-rule="evenodd" />
+                </svg>
+            ` : ''}
+            <span>${message}</span>
+        </div>
+        <button class="ml-4 text-sm hover:text-gold-accent focus:outline-none" onclick="this.parentNode.remove()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    `;
 
     container.appendChild(notification);
 
@@ -564,20 +585,67 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Initialize cart and wishlist counts
-function initializeCounters() {
-    const cartCountEl = document.getElementById('cart-count');
-    const wishlistCountEl = document.getElementById('wishlist-count');
+// Global Cart Counter
+function updateGlobalCartCounter() {
+    // Get all cart count elements across pages
+    const cartCountEls = document.querySelectorAll('.cart-count');
 
-    if (cartCountEl) {
-        const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCountEl.textContent = totalItems;
-        cartCountEl.classList.toggle('hidden', totalItems === 0);
-    }
+    // Get cart from localStorage
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    if (wishlistCountEl) {
-        wishlistCountEl.textContent = state.wishlist.length;
-        wishlistCountEl.classList.toggle('hidden', state.wishlist.length === 0);
+    // Calculate total items in cart
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    // Update all cart count elements
+    cartCountEls.forEach(el => {
+        el.textContent = totalItems;
+
+        // Show/hide based on count
+        if (totalItems > 0) {
+            el.classList.remove('hidden');
+
+            // Optionally add a quick animation to draw attention
+            el.classList.add('cart-pulse');
+            setTimeout(() => {
+                el.classList.remove('cart-pulse');
+            }, 300);
+        } else {
+            el.classList.add('hidden');
+        }
+    });
+}
+
+// Initialize Back-to-Top Button
+function initBackToTop() {
+    // Create the button if it doesn't exist
+    if (!document.getElementById('back-to-top')) {
+        const backToTopBtn = document.createElement('button');
+        backToTopBtn.id = 'back-to-top';
+        backToTopBtn.className = 'fixed bottom-6 right-6 bg-racing-green text-racing-white p-3 rounded-full shadow-lg opacity-0 transition-all duration-300 hover:bg-gold-accent z-50 transform translate-y-10';
+        backToTopBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+        `;
+
+        document.body.appendChild(backToTopBtn);
+
+        // Add click event
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Show/hide based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+            }
+        });
     }
 }
 
@@ -596,21 +664,21 @@ function renderRecentlyViewed() {
 
     container.classList.remove('hidden');
     container.innerHTML = `
-    <h2 class="text-2xl font-bold text-racing-green mb-4">Recently Viewed</h2>
-    <div class="grid grid-cols-5 gap-4 overflow-x-auto pb-4">
-      ${recentlyViewed.map(product => `
-        <a href="product-details.html?id=${product.id}" class="block">
-          <div class="bg-racing-white rounded-lg overflow-hidden shadow border border-pit-lane-gray hover:border-gold-accent transition-all">
-            <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-32 object-cover">
-            <div class="p-2">
-              <h3 class="text-racing-green font-medium text-sm">${product.name}</h3>
-              <p class="text-gold-accent font-bold">${product.price.toFixed(2)}</p>
-            </div>
-          </div>
-        </a>
-      `).join('')}
-    </div>
-  `;
+        <h2 class="text-2xl font-bold text-racing-green mb-4">Recently Viewed</h2>
+        <div class="grid grid-cols-5 gap-4 overflow-x-auto pb-4">
+            ${recentlyViewed.map(product => `
+                <a href="product-details.html?id=${product.id}" class="block">
+                    <div class="bg-racing-white rounded-lg overflow-hidden shadow border border-pit-lane-gray hover:border-gold-accent transition-all">
+                        <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-32 object-cover">
+                        <div class="p-2">
+                            <h3 class="text-racing-green font-medium text-sm">${product.name}</h3>
+                            <p class="text-gold-accent font-bold">$${product.price.toFixed(2)}</p>
+                        </div>
+                    </div>
+                </a>
+            `).join('')}
+        </div>
+    `;
 }
 
 // Add to recently viewed
@@ -637,33 +705,6 @@ function addToRecentlyViewed(productId) {
     renderRecentlyViewed();
 }
 
-// Cart Management
-function addToCart(productId) {
-    const product = state.products.find(p => p.id === productId);
-
-    if (!product) {
-        logError(`Product with ID ${productId} not found`);
-        return;
-    }
-
-    // Check if product already in cart
-    const existingProductIndex = state.cart.findIndex(item => item.id === productId);
-
-    if (existingProductIndex > -1) {
-        // Increment quantity
-        state.cart[existingProductIndex].quantity += 1;
-    } else {
-        // Add new product
-        state.cart.push({ ...product, quantity: 1 });
-    }
-
-    // Update localStorage
-    localStorage.setItem('cart', JSON.stringify(state.cart));
-
-    // Optional: Show notification
-    console.log(`Added ${product.name} to cart`);
-}
-
 // Initialize Application
 function initApp() {
     try {
@@ -672,12 +713,42 @@ function initApp() {
         // Initialize dark mode
         initDarkMode();
 
+        // Initialize back-to-top button
+        initBackToTop();
+
+        // Update global cart counter
+        updateGlobalCartCounter();
+
         // Fetch and render products
         fetchProducts().then(() => {
             // Setup search after products are loaded
             setupSearch();
+
+            // Add cart-pulse animation to style.css if not already there
+            if (!document.querySelector('#cart-pulse-style')) {
+                const style = document.createElement('style');
+                style.id = 'cart-pulse-style';
+                style.textContent = `
+                  @keyframes cartPulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.3); }
+                    100% { transform: scale(1); }
+                  }
+                  .cart-pulse {
+                    animation: cartPulse 0.3s ease-in-out;
+                  }
+                `;
+                document.head.appendChild(style);
+            }
         }).catch(error => {
             console.error('Product fetch failed during initialization', error);
+        });
+
+// Update cart counter when storage changes (for multi-tab support)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'cart') {
+                updateGlobalCartCounter();
+            }
         });
 
         console.log('F1 Gear App initialized');

@@ -12,7 +12,7 @@ header {
 }
 
 /* Logo styling */
-.logo h1 {
+.logo h1, .logo a {
     color: var(--gold-accent, #CBA135);
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
@@ -21,11 +21,27 @@ header {
 nav a {
     color: var(--racing-white, #FAFAFA);
     transition: color 0.2s, transform 0.2s;
+    position: relative;
 }
 
 nav a:hover {
     color: var(--gold-accent, #CBA135);
     transform: translateY(-2px);
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--gold-accent, #CBA135);
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
 }
 
 /* Dark Mode Styles */
@@ -185,6 +201,127 @@ body.dark .bg-racing-white {
     background: linear-gradient(90deg, var(--gold-accent, #CBA135) 0%, var(--racing-green, #003B2B) 100%);
 }
 
+/* Back to Top Button */
+#back-to-top {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#back-to-top:hover {
+    transform: translateY(-5px);
+}
+
+.dark #back-to-top {
+    background-color: var(--gold-accent, #CBA135);
+}
+
+.dark #back-to-top:hover {
+    background-color: var(--racing-green, #003B2B);
+}
+
+/* Cart Counter Animation */
+@keyframes cartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.cart-count {
+    transition: all 0.3s ease;
+}
+
+.cart-pulse {
+    animation: cartPulse 0.3s ease-in-out;
+}
+
+/* Ensure external links look distinct */
+a[href^="https://f1stories.gr"] {
+    position: relative;
+    display: inline-block;
+}
+
+/* Show icon for external links in the footer */
+footer a[href^="https://f1stories.gr"]::after {
+    content: '↗';
+    display: inline-block;
+    margin-left: 2px;
+    font-size: 0.8em;
+    transition: transform 0.2s ease;
+}
+
+footer a[href^="https://f1stories.gr"]:hover::after {
+    transform: translate(2px, -2px);
+}
+
+/* Make sure the page transitions flow smoothly when using back-to-top */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    scroll-padding-top: 70px; /* Adjust based on your header height */
+}
+
+/* Tab System Styling */
+.tab-btn {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-btn:not(.active):hover {
+    color: var(--racing-green, #003B2B);
+}
+
+.tab-content {
+    border: 1px solid var(--pit-lane-gray, #6A6A6A);
+    border-top: none;
+}
+
+/* Notification System */
+.notification {
+    border-left: 4px solid;
+}
+
+.notification.success {
+    border-color: var(--racing-green, #003B2B);
+}
+
+.notification.error {
+    border-color: var(--racing-red, #D50000);
+}
+
+.notification.info {
+    border-color: var(--gold-accent, #CBA135);
+}
+
+/* Quantity Input Styling */
+.quantity-input {
+    display: flex;
+    border: 1px solid var(--pit-lane-gray, #6A6A6A);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.quantity-input button {
+    background-color: var(--racing-white, #FAFAFA);
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.quantity-input button:hover {
+    background-color: var(--gold-accent, #CBA135);
+    color: var(--racing-white, #FAFAFA);
+}
+
+.quantity-input input {
+    border: none;
+    width: 40px;
+    text-align: center;
+    border-left: 1px solid var(--pit-lane-gray, #6A6A6A);
+    border-right: 1px solid var(--pit-lane-gray, #6A6A6A);
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .flex {
@@ -204,5 +341,22 @@ body.dark .bg-racing-white {
     /* Adjust racing stripe for mobile */
     .racing-stripe {
         height: 3px;
+    }
+
+    /* Stack navigation on mobile */
+    header nav {
+        flex-wrap: wrap;
+    }
+
+    /* Make back-to-top button smaller on mobile */
+    #back-to-top {
+        bottom: 20px;
+        right: 20px;
+        padding: 8px;
+    }
+
+    #back-to-top svg {
+        width: 20px;
+        height: 20px;
     }
 }
