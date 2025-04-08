@@ -17,7 +17,11 @@
   <div id="cart" class="mt-8"></div>
   <div id="cart-summary" class="mt-4 flex justify-between items-center">
     <div id="total-price" class="text-xl font-bold"></div>
-    <a href="checkout.html" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+    <a
+            href="checkout.html"
+            id="checkout-button"
+            class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
       Proceed to Checkout
     </a>
   </div>
@@ -26,12 +30,24 @@
 <script src="cart.js"></script>
 <script>
   // Additional cart page specific script
-  function updateCartSummary() {
+  function updateCheckoutButton() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
-    document.getElementById('total-price').textContent = `Total: $${totalPrice.toFixed(2)}`;
+    const checkoutButton = document.getElementById('checkout-button');
+
+    if (cart.length === 0) {
+      checkoutButton.disabled = true;
+      checkoutButton.classList.add('disabled');
+    } else {
+      checkoutButton.disabled = false;
+      checkoutButton.classList.remove('disabled');
+    }
   }
-  updateCartSummary();
+
+  // Call these on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    renderCart();
+    updateCheckoutButton();
+  });
 </script>
 </body>
 </html>

@@ -15,61 +15,103 @@
 </nav>
 
 <div class="container mx-auto px-4 mt-8">
+  <div id="checkout-error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden" role="alert">
+    <strong class="font-bold">Error!</strong>
+    <span id="error-message" class="block sm:inline"></span>
+  </div>
+
   <div id="order-summary" class="bg-white shadow-md rounded-lg p-6 mb-6">
     <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
     <div id="checkout-items"></div>
-    <div id="total-amount" class="text-right mt-4 text-xl font-bold"></div>
+    <div class="border-t mt-4 pt-4">
+      <div id="total-amount" class="text-right text-xl font-bold"></div>
+    </div>
   </div>
+
   <div id="paypal-button-container" class="flex justify-center"></div>
 </div>
 
 <script src="cart.js"></script>
 <script>
+  function showError(message) {
+    const errorContainer = document.getElementById('checkout-error');
+    const errorMessage = document.getElementById('error-message');
+
+    errorMessage.textContent = message;
+    errorContainer.classList.remove('hidden');
+  }
+
   function renderCheckoutItems() {
     const items = JSON.parse(localStorage.getItem('cart') || '[]');
     const checkoutItemsContainer = document.getElementById('checkout-items');
     const totalAmountContainer = document.getElementById('total-amount');
+    const paypalContainer = document.getElementById('paypal-button-container');
 
     if (items.length === 0) {
-      checkoutItemsContainer.innerHTML = '<p class="text-center text-gray-500">Your cart is empty</p>';
+      checkoutItemsContainer.innerHTML = `
+          <p class="text-center text-gray-500">Your cart is empty</p>
+        `;
       totalAmountContainer.textContent = 'Total: $0.00';
+      paypalContainer.innerHTML = '';
+      showError('Cannot proceed to checkout with an empty cart');
       return;
     }
 
+    // Clear any previous errors
+    document.getElementById('checkout-error').classList.add('hidden');
+
     checkoutItemsContainer.innerHTML = items.map(item => `
         <div class="flex justify-between border-b py-2">
-          <span>${item.name}</span>
-          <span>$${item.price.toFixed(2)}</span>
+          <div class="flex items-center">
+            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover mr-4 rounded">
+            <div>
+              <span>${item.name}</span>
+              <p class="text-gray-600">$${item.price.toFixed(2)} x ${item.quantity || 1}</p>
+            </div>
+          </div>
+          <span>$${((item.price * (item.quantity || 1)).toFixed(2))}</span>
         </div>
       `).join('');
 
-    const total = items.reduce((sum, item) => sum + item.price, 0);
+    const total = items.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
     totalAmountContainer.textContent = `Total: $${total.toFixed(2)}`;
+
+    // Setup PayPal buttons
+    setupPayPalButtons(total);
   }
 
-  renderCheckoutItems();
-
-  const items = JSON.parse(localStorage.getItem('cart') || '[]');
-  const total = items.reduce((sum, item) => sum + item.price, 0);
-
-  paypal.Buttons({
-    createOrder: function(data, actions) {
-      return actions.order.create({
-        purchase_units: [{
-          amount: {
-            value: total.toFixed(2)
-          }
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        alert('Transaction completed by ' + details.payer.name.given_name);
-        localStorage.removeItem('cart');
-        window.location.href = 'index.html';
-      });
+  function setupPayPalButtons(total) {
+    try {
+      paypal.Buttons({
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: total.toFixed(2)
+              }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert('Transaction completed by ' + details.payer.name.given_name);
+            localStorage.removeItem('cart');
+            window.location.href = 'index.html';
+          });
+        },
+        onError: function(err) {
+          showError('PayPal transaction failed. Please try again.');
+          console.error('PayPal Error:', err);
+        }
+      }).render('#paypal-button-container');
+    } catch (error) {
+      showError('Failed to load payment options. Please refresh the page.');
+      console.error('PayPal Button Error:', error);
     }
-  }).render('#paypal-button-container');
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', renderCheckoutItems);
 </script>
 </body>
 </html>

@@ -1,18 +1,35 @@
+// Cart functionality with quantity management
 function addToCart(product) {
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-  // Check if product is already in cart
+  // Find existing product in cart
   const existingProductIndex = cart.findIndex(p => p.id === product.id);
 
   if (existingProductIndex > -1) {
-    // If product exists, you could increment quantity or prevent duplicate
-    alert(product.name + " is already in your cart!");
-    return;
+    // If product exists, increment quantity
+    cart[existingProductIndex].quantity =
+        (cart[existingProductIndex].quantity || 1) + 1;
+  } else {
+    // Add new product with quantity
+    cart.push({
+      ...product,
+      quantity: 1
+    });
   }
 
-  cart.push(product);
   localStorage.setItem('cart', JSON.stringify(cart));
-  alert(product.name + " added to cart!");
+  updateCartNotification();
+  alert(`${product.name} added to cart. Quantity: ${cart[existingProductIndex > -1 ? existingProductIndex : cart.length - 1].quantity}`);
+}
+
+function updateCartNotification() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const cartNotification = document.getElementById('cart-notification');
+  if (cartNotification) {
+    const totalItems = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+    cartNotification.textContent = totalItems;
+    cartNotification.classList.toggle('hidden', totalItems === 0);
+  }
 }
 
 function renderCart() {
@@ -31,40 +48,85 @@ function renderCart() {
         </a>
       </div>
     `;
+    updateTotalPrice();
     return;
   }
 
   const cartHTML = cart.map((p, index) => `
     <div class="flex justify-between items-center border-b p-4">
-      <div>
-        <strong>${p.name}</strong>
-        <p>$${p.price.toFixed(2)}</p>
+      <div class="flex items-center space-x-4">
+        <img src="${p.image}" alt="${p.name}" class="w-16 h-16 object-cover rounded">
+        <div>
+          <strong>${p.name}</strong>
+          <p>$${p.price.toFixed(2)}</p>
+        </div>
       </div>
-      <button 
-        onclick="removeFromCart(${index})" 
-        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-      >
-        Remove
-      </button>
+      <div class="flex items-center space-x-2">
+        <button 
+          onclick="updateQuantity(${index}, -1)" 
+          class="bg-gray-200 px-2 py-1 rounded"
+        >
+          -
+        </button>
+        <span>${p.quantity || 1}</span>
+        <button 
+          onclick="updateQuantity(${index}, 1)" 
+          class="bg-gray-200 px-2 py-1 rounded"
+        >
+          +
+        </button>
+        <button 
+          onclick="removeFromCart(${index})" 
+          class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+        >
+          Remove
+        </button>
+      </div>
     </div>
   `).join('');
 
   cartContainer.innerHTML = cartHTML;
+  updateTotalPrice();
+  updateCartNotification();
+}
+
+function updateQuantity(index, change) {
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  // Update quantity
+  cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + change);
+
+  // Remove if quantity is 0
+  if (cart[index].quantity < 1) {
+    cart.splice(index, 1);
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  renderCart();
 }
 
 function removeFromCart(index) {
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
   cart.splice(index, 1);
   localStorage.setItem('cart', JSON.stringify(cart));
-  renderCart();  // Re-render cart after removing item
-
-  // If on checkout page, update total
-  if (window.location.pathname.includes('checkout.html')) {
-    // This will be handled by checkout script
-  }
-}
-
-// Call renderCart only on pages that have a cart container
-if (document.getElementById('cart')) {
   renderCart();
 }
+
+function updateTotalPrice() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+
+  // Update total price on cart and checkout pages
+  const totalPriceElements = document.querySelectorAll('#total-price, #total-amount');
+  totalPriceElements.forEach(el => {
+    if (el) el.textContent = `Total: $${totalPrice.toFixed(2)}`;
+  });
+}
+
+// Initialize cart notification and total price on load
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartNotification();
+  if (document.getElementById('cart')) {
+    renderCart();
+  }
+});
