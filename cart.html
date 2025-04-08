@@ -3,50 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cart</title>
+  <title>F1 Cart</title>
   <link href="style.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<nav class="bg-blue-500 p-4 flex justify-between items-center">
-  <a href="index.html" class="text-white hover:bg-blue-600 px-3 py-2 rounded">← Back to Shop</a>
-  <h1 class="text-2xl font-bold text-white">Shopping Cart</h1>
+<body class="bg-warm-beige">
+<nav class="fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center">
+  <a href="index.html" class="flex items-center group">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mr-2 group-hover:text-light-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+    <span class="text-2xl font-bold text-white group-hover:text-light-gold transition-colors">
+        Continue Shopping
+      </span>
+  </a>
+  <h1 class="text-3xl font-bold text-white">F1 Cart</h1>
 </nav>
 
-<div class="container mx-auto px-4">
-  <div id="cart" class="mt-8"></div>
-  <div id="cart-summary" class="mt-4 flex justify-between items-center">
-    <div id="total-price" class="text-xl font-bold"></div>
-    <a
-            href="checkout.html"
-            id="checkout-button"
-            class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      Proceed to Checkout
-    </a>
+<div class="container mx-auto px-4 pt-24">
+  <div id="cart" class="grid gap-6"></div>
+  <div id="cart-summary" class="mt-8 bg-white rounded-xl shadow-lg p-6">
+    <div class="flex justify-between items-center border-b pb-4 mb-4">
+      <h2 class="text-2xl font-bold text-black">Order Summary</h2>
+      <span id="total-items" class="text-dark-gray">0 Items</span>
+    </div>
+    <div class="flex justify-between items-center">
+      <div id="total-price" class="text-3xl font-bold text-gold">$0.00</div>
+      <a
+              href="checkout.html"
+              id="checkout-button"
+              class="bg-black text-white px-8 py-3 rounded-full hover:bg-dark-gray transition-colors"
+      >
+        Proceed to Checkout
+      </a>
+    </div>
   </div>
 </div>
 
 <script src="cart.js"></script>
 <script>
-  // Additional cart page specific script
-  function updateCheckoutButton() {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const checkoutButton = document.getElementById('checkout-button');
-
-    if (cart.length === 0) {
-      checkoutButton.disabled = true;
-      checkoutButton.classList.add('disabled');
-    } else {
-      checkoutButton.disabled = false;
-      checkoutButton.classList.remove('disabled');
-    }
-  }
-
-  // Call these on page load
   document.addEventListener('DOMContentLoaded', () => {
     renderCart();
-    updateCheckoutButton();
+
+    // Update total items
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const totalItemsElement = document.getElementById('total-items');
+    if (totalItemsElement) {
+      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      totalItemsElement.textContent = `${totalItems} Item${totalItems !== 1 ? 's' : ''}`;
+    }
   });
 </script>
 </body>
