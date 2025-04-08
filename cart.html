@@ -1,58 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>F1 Cart</title>
-  <link href="style.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-black': '#000000',
+            'brand-gold': '#CD7F32',
+            'brand-dark-gray': '#3A3B3C',
+            'brand-light-gold': '#D4AF37',
+            'brand-white': '#FFFFFF',
+            'brand-beige': '#F5F5DC',
+            'brand-bronze': '#8B7355'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .dark-mode {
+      background-color: #000000;
+      color: #FFFFFF;
+    }
+  </style>
 </head>
-<body class="bg-warm-beige">
-<nav class="fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center">
-  <a href="index.html" class="flex items-center group">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mr-2 group-hover:text-light-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-    </svg>
-    <span class="text-2xl font-bold text-white group-hover:text-light-gold transition-colors">
-        Continue Shopping
-      </span>
-  </a>
-  <h1 class="text-3xl font-bold text-white">F1 Cart</h1>
-</nav>
+<body class="bg-brand-beige text-brand-dark-gray">
+<header class="bg-brand-black text-brand-white p-4 flex justify-between items-center">
+  <a href="index.html" class="text-2xl font-bold text-brand-light-gold">F1 Shop</a>
+  <nav>
+    <a href="index.html" class="hover:text-brand-gold mr-4">Continue Shopping</a>
+    <button id="darkModeToggle" class="hover:text-brand-gold">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+  </nav>
+</header>
 
-<div class="container mx-auto px-4 pt-24">
-  <div id="cart" class="grid gap-6"></div>
-  <div id="cart-summary" class="mt-8 bg-white rounded-xl shadow-lg p-6">
-    <div class="flex justify-between items-center border-b pb-4 mb-4">
-      <h2 class="text-2xl font-bold text-black">Order Summary</h2>
-      <span id="total-items" class="text-dark-gray">0 Items</span>
+<div class="container mx-auto mt-8 p-4">
+  <h1 class="text-3xl font-bold mb-6 text-brand-light-gold">Your Cart</h1>
+
+  <div id="cartItems" class="space-y-4 mb-8">
+    <!-- Cart items will be dynamically inserted here -->
+  </div>
+
+  <div class="bg-brand-dark-gray p-6 rounded-lg">
+    <div class="flex justify-between mb-4">
+      <span class="text-brand-white text-xl">Total:</span>
+      <span id="cartTotal" class="text-brand-gold text-2xl font-bold">$0.00</span>
     </div>
-    <div class="flex justify-between items-center">
-      <div id="total-price" class="text-3xl font-bold text-gold">$0.00</div>
-      <a
-              href="checkout.html"
-              id="checkout-button"
-              class="bg-black text-white px-8 py-3 rounded-full hover:bg-dark-gray transition-colors"
-      >
-        Proceed to Checkout
-      </a>
-    </div>
+    <button
+            id="checkoutBtn"
+            class="w-full bg-brand-gold text-brand-white py-3 rounded hover:bg-brand-bronze transition"
+    >
+      Proceed to Checkout
+    </button>
   </div>
 </div>
 
-<script src="cart.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    renderCart();
+  // Dark Mode Toggle
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const body = document.body;
 
-    // Update total items
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const totalItemsElement = document.getElementById('total-items');
-    if (totalItemsElement) {
-      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-      totalItemsElement.textContent = `${totalItems} Item${totalItems !== 1 ? 's' : ''}`;
-    }
+  // Check initial dark mode state
+  if (localStorage.getItem('darkMode') === 'true') {
+    body.classList.add('dark-mode');
+  }
+
+  darkModeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
   });
+
+  // Cart Management
+  const cartItemsContainer = document.getElementById('cartItems');
+  const cartTotalElement = document.getElementById('cartTotal');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  function renderCart() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    // Clear previous items
+    cartItemsContainer.innerHTML = '';
+
+    // Render cart items
+    let total = 0;
+    cart.forEach((item, index) => {
+      const cartItemElement = document.createElement('div');
+      cartItemElement.className = `
+                    bg-brand-white
+                    p-4
+                    rounded-lg
+                    flex
+                    justify-between
+                    items-center
+                `;
+
+      const itemTotal = item.price * item.quantity;
+      total += itemTotal;
+
+      cartItemElement.innerHTML = `
+                    <div>
+                        <h3 class="text-brand-dark-gray font-bold">${item.name}</h3>
+                        <p class="text-brand-gold">
+                            $${item.price.toFixed(2)} × ${item.quantity}
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-brand-dark-gray font-bold">
+                            $${itemTotal.toFixed(2)}
+                        </span>
+                        <button
+                            onclick="removeFromCart(${index})"
+                            class="
+                                bg-brand-gold
+                                text-brand-white
+                                px-3
+                                py-1
+                                rounded
+                                hover:bg-brand-bronze
+                            "
+                        >
+                            Remove
+                        </button>
+                    </div>
+                `;
+
+      cartItemsContainer.appendChild(cartItemElement);
+    });
+
+    // Update total
+    cartTotalElement.textContent = `$${total.toFixed(2)}`;
+
+    // Toggle checkout button state
+    checkoutBtn.disabled = cart.length === 0;
+    checkoutBtn.classList.toggle('opacity-50', cart.length === 0);
+    checkoutBtn.classList.toggle('cursor-not-allowed', cart.length === 0);
+  }
+
+  function removeFromCart(index) {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart();
+  }
+
+  // Checkout functionality
+  checkoutBtn.addEventListener('click', () => {
+    window.location.href = 'checkout.html';
+  });
+
+  // Initial render
+  renderCart();
 </script>
 </body>
 </html>

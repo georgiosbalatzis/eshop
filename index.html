@@ -1,55 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>F1 Store</title>
-  <link href="style.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>F1 Gear</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'brand-black': '#000000',
+            'brand-gold': '#CD7F32',
+            'brand-dark-gray': '#3A3B3C',
+            'brand-light-gold': '#D4AF37',
+            'brand-white': '#FFFFFF',
+            'brand-beige': '#F5F5DC',
+            'brand-bronze': '#8B7355'
+          }
+        }
+      }
+    }
+  </script>
+  <link href="style.css" rel="stylesheet">
 </head>
-<body>
-<nav class="fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center">
-  <div class="flex items-center">
-    <h1 class="text-3xl font-bold text-white tracking-wider">F1 RACING STORE</h1>
+<body class="bg-brand-beige text-brand-dark-gray">
+<header class="bg-brand-black text-brand-white p-4 flex justify-between items-center">
+  <div class="logo">
+    <h1 class="text-2xl font-bold text-brand-light-gold">F1 Gear</h1>
   </div>
-  <div class="flex items-center space-x-6">
-    <div class="relative">
-      <input
-              type="text"
-              id="product-search"
-              placeholder="Search racing gear..."
-              class="px-4 py-2 rounded-full bg-dark-gray text-white focus:outline-none focus:ring-2 focus:ring-gold"
+  <nav class="flex space-x-4 items-center">
+    <a href="#" class="hover:text-brand-gold">Home</a>
+    <a href="#" class="hover:text-brand-gold">About</a>
+    <a href="#" class="hover:text-brand-gold">Contact</a>
+    <a href="wishlist.html" class="hover:text-brand-gold relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+      <span
+              id="wishlist-count"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-1 hidden"
       >
-      <select
-              id="category-filter"
-              class="ml-4 px-4 py-2 rounded-full bg-dark-gray text-white focus:outline-none focus:ring-2 focus:ring-gold"
-      >
-        <option value="">All Categories</option>
-      </select>
-    </div>
-    <a href="cart.html" class="relative group">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white group-hover:text-light-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    0
+                </span>
+    </a>
+    <a href="cart.html" class="hover:text-brand-gold relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
       </svg>
       <span
-              id="cart-notification"
-              class="absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full px-2 py-1 hidden"
+              id="cart-count"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-1 hidden"
       >
-          0
-        </span>
+                    0
+                </span>
     </a>
-  </div>
-</nav>
+    <button id="darkModeToggle" class="hover:text-brand-gold">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+  </nav>
+</header>
 
-<div class="container mx-auto px-4 pt-24">
-  <div id="products" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
-  <div id="no-results" class="text-center text-dark-gray mt-8 hidden">
-    No racing items found.
+<!-- Hero Section -->
+<section class="bg-brand-beige p-12 flex items-center">
+  <div class="w-1/2 pr-8">
+    <h1 class="text-5xl font-bold text-brand-light-gold mb-4">F1 Gear Collection</h1>
+    <p class="text-brand-bronze mb-6">Authentic Racing Merchandise</p>
+  </div>
+  <div class="w-1/2">
+    <img src="https://via.placeholder.com/500" alt="F1 Gear" class="rounded-lg shadow-lg">
+  </div>
+</section>
+
+<!-- Recently Viewed Section -->
+<div class="container mx-auto mt-8 p-4">
+  <div id="recently-viewed-container" class="mb-8">
+    <!-- Recently viewed items will be dynamically inserted here -->
   </div>
 </div>
 
+<!-- Main Content -->
+<div class="flex container mx-auto mt-8">
+  <!-- Sidebar Filters -->
+  <aside id="categoryFilters" class="w-1/4 bg-brand-dark-gray p-4 rounded-lg mr-8">
+    <h2 class="text-brand-white text-xl mb-4">Categories</h2>
+    <div class="mb-4">
+      <input
+              type="text"
+              id="product-search"
+              placeholder="Search F1 Gear"
+              class="w-full p-2 rounded bg-brand-white text-brand-dark-gray"
+      >
+    </div>
+    <div id="filterContainer" class="space-y-2"></div>
+  </aside>
+
+  <!-- Product Grid -->
+  <main id="productGrid" class="w-3/4 grid grid-cols-3 gap-4">
+    <!-- Products will be dynamically inserted here -->
+  </main>
+</div>
+
+<!-- Notification Container -->
+<div id="notification-container" class="fixed top-4 right-4 z-50"></div>
+
+<!-- Error Container -->
+<div id="error-container" class="hidden"></div>
+
+<!-- Scripts -->
 <script src="config.js"></script>
-<script src="products.js"></script>
-<script src="cart.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

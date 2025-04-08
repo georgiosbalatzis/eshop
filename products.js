@@ -101,55 +101,83 @@ function parseCSVRow(row) {
   );
 }
 
-function renderProducts(products) {
-  const container = document.getElementById('products');
-  const noResultsMessage = document.getElementById('no-results');
+f// Render Products with Enhanced Details
+function renderProducts(productsToRender = state.products) {
+  const productGrid = document.getElementById('productGrid');
+  productGrid.innerHTML = '';
 
-  if (!container) return;
+  productsToRender.forEach(product => {
+    const productCard = document.createElement('div');
+    productCard.className = `
+            product-card
+            bg-brand-dark-gray 
+            rounded-lg 
+            overflow-hidden 
+            shadow-lg 
+            border 
+            border-brand-light-gold
+            relative
+        `;
 
-  // Clear previous products
-  container.innerHTML = '';
+    // Check if product is in wishlist
+    const isInWishlist = state.wishlist.some(item => item.id === product.id);
 
-  if (products.length === 0) {
-    noResultsMessage.classList.remove('hidden');
-    return;
-  }
-
-  noResultsMessage.classList.add('hidden');
-
-  products.forEach(p => {
-    const div = document.createElement('div');
-    div.className = "product-card border rounded-lg shadow-lg overflow-hidden";
-    div.innerHTML = `
-      <a href="product-details.html?id=${p.id}" class="block">
-        <div class="relative overflow-hidden">
-          <img 
-            src="${p.image}" 
-            alt="${p.name}" 
-            class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
-          />
-          <div class="absolute top-0 right-0 m-2 bg-gold text-white px-2 py-1 rounded-full text-xs">
-            ${p.category}
-          </div>
-        </div>
-        <div class="p-4">
-          <h3 class="text-xl font-semibold text-black truncate">${p.name}</h3>
-          <div class="flex justify-between items-center mt-2">
-            <span class="text-lg font-bold text-gold">$ ${p.price.toFixed(2)}</span>
-          </div>
-        </div>
-      </a>
-      <div class="p-4 border-t">
-        <button 
-          onclick='addToCart(${JSON.stringify(p)})' 
-          class="add-to-cart w-full py-2 rounded-full text-white font-semibold transition-all duration-300 hover:scale-105"
-        >
-          Add to Cart
-        </button>
-      </div>
-    `;
-    container.appendChild(div);
+    productCard.innerHTML = `
+            <div class="relative">
+                <img 
+                    src="${product.imageUrl}" 
+                    alt="${product.name}" 
+                    class="w-full h-48 object-cover"
+                >
+                <button 
+                    class="wishlist-toggle absolute top-2 right-2 ${isInWishlist ? 'text-red-500' : 'text-white'}"
+                    data-product-id="${product.id}"
+                    onclick="toggleWishlist('${product.id}')"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <h3 class="text-brand-light-gold font-bold mb-2">${product.name}</h3>
+                <p class="text-brand-white mb-2">${product.category}</p>
+                <div class="text-brand-white text-sm mb-2">
+                    <strong>Material:</strong> ${product.details.material}<br>
+                    <strong>Size:</strong> ${product.details.size}<br>
+                    <strong>Color:</strong> ${product.details.color}
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-brand-gold font-bold">$${product.price.toFixed(2)}</span>
+                    <button 
+                        onclick="addToCart('${product.id}')" 
+                        class="
+                            bg-brand-gold 
+                            text-brand-white 
+                            px-4 
+                            py-2 
+                            rounded 
+                            hover:bg-brand-bronze 
+                            transition
+                        "
+                    >
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        `;
+    productGrid.appendChild(productCard);
   });
+
+  // If no products found
+  if (productsToRender.length === 0) {
+    productGrid.innerHTML = `
+            <div class="col-span-full text-center text-brand-dark-gray">
+                <p class="text-2xl">No F1 Gear Found</p>
+                <p class="text-lg mt-2">Try adjusting your search or filters</p>
+            </div>
+        `;
+  }
 }
 
 function setupSearchAndFilter() {

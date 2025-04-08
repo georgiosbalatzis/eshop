@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Gear - Wishlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-black': '#000000',
+                        'brand-gold': '#CD7F32',
+                        'brand-dark-gray': '#3A3B3C',
+                        'brand-light-gold': '#D4AF37',
+                        'brand-white': '#FFFFFF',
+                        'brand-beige': '#F5F5DC',
+                        'brand-bronze': '#8B7355'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body class="bg-brand-beige text-brand-dark-gray">
+<header class="bg-brand-black text-brand-white p-4 flex justify-between items-center">
+    <div class="logo">
+        <h1 class="text-2xl font-bold text-brand-light-gold">F1 Gear Wishlist</h1>
+    </div>
+    <nav class="flex space-x-4 items-center">
+        <a href="index.html" class="hover:text-brand-gold">Back to Shop</a>
+        <a href="cart.html" class="hover:text-brand-gold relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span
+                    id="cart-count"
+                    class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-1 hidden"
+            >
+                    0
+                </span>
+        </a>
+        <button id="darkModeToggle" class="hover:text-brand-gold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </nav>
+</header>
+
+<div class="container mx-auto mt-8 p-4">
+    <h1 class="text-3xl font-bold mb-6 text-brand-light-gold">Your Wishlist</h1>
+
+    <div id="wishlistItems" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Wishlist items will be dynamically inserted here -->
+    </div>
+
+    <div id="emptyWishlist" class="text-center mt-12 hidden">
+        <p class="text-brand-dark-gray text-2xl mb-4">Your wishlist is empty</p>
+        <a
+                href="index.html"
+                class="inline-block bg-brand-gold text-brand-white px-6 py-3 rounded hover:bg-brand-bronze transition"
+        >
+            Continue Shopping
+        </a>
+    </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    // Check initial dark mode state
+    if (localStorage.getItem('darkMode') === 'true') {
+        body.classList.add('dark');
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark');
+        localStorage.setItem('darkMode', body.classList.contains('dark'));
+    });
+
+    // Wishlist Page Specific Script
+    document.addEventListener('DOMContentLoaded', () => {
+        const wishlistItems = document.getElementById('wishlistItems');
+        const emptyWishlist = document.getElementById('emptyWishlist');
+        const cartCountEl = document.getElementById('cart-count');
+
+        // Retrieve wishlist from localStorage
+        const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+        // Update cart count
+        if (cartCountEl) {
+            const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCountEl.textContent = totalCartItems;
+            cartCountEl.classList.toggle('hidden', totalCartItems === 0);
+        }
+
+        // Render wishlist items
+        if (wishlist.length === 0) {
+            emptyWishlist.classList.remove('hidden');
+            wishlistItems.classList.add('hidden');
+        } else {
+            emptyWishlist.classList.add('hidden');
+            wishlistItems.innerHTML = wishlist.map(product => `
+                    <div class="bg-brand-dark-gray rounded-lg overflow-hidden shadow-lg border border-brand-light-gold">
+                        <img
+                            src="${product.imageUrl}"
+                            alt="${product.name}"
+                            class="w-full h-48 object-cover"
+                        >
+                        <div class="p-4">
+                            <h3 class="text-brand-light-gold font-bold mb-2">${product.name}</h3>
+                            <p class="text-brand-white mb-2">${product.category}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-brand-gold font-bold">$${product.price.toFixed(2)}</span>
+                                <div class="flex space-x-2">
+                                    <button
+                                        onclick="addToCart('${product.id}')"
+                                        class="bg-brand-gold text-brand-white px-4 py-2 rounded hover:bg-brand-bronze transition"
+                                    >
+                                        Add to Cart
+                                    </button>
+                                    <button
+                                        onclick="removeFromWishlist('${product.id}')"
+                                        class="bg-red-500 text-brand-white px-4 py-2 rounded hover:bg-red-600 transition"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        // Remove from wishlist function
+        window.removeFromWishlist = function(productId) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const updatedWishlist = wishlist.filter(item => item.id !== productId);
+
+            localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+
+            // Reload the page to refresh the view
+            location.reload();
+        }
+
+        // Add to cart function
+        window.addToCart = function(productId) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+            const product = wishlist.find(item => item.id === productId);
+
+            if (product) {
+                // Check if product already in cart
+                const existingProductIndex = cart.findIndex(item => item.id === productId);
+
+                if (existingProductIndex > -1) {
+                    // Increment quantity
+                    cart[existingProductIndex].quantity += 1;
+                } else {
+                    // Add new product
+                    cart.push({ ...product, quantity: 1 });
+                }
+
+                // Update localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                // Remove from wishlist
+                const updatedWishlist = wishlist.filter(item => item.id !== productId);
+                localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+
+                // Reload the page
+                location.reload();
+            }
+        }
+    });
+</script>
+</body>
+</html>

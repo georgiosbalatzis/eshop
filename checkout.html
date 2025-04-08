@@ -1,195 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>F1 Checkout</title>
-  <link href="style.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-black': '#000000',
+            'brand-gold': '#CD7F32',
+            'brand-dark-gray': '#3A3B3C',
+            'brand-light-gold': '#D4AF37',
+            'brand-white': '#FFFFFF',
+            'brand-beige': '#F5F5DC',
+            'brand-bronze': '#8B7355'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .dark-mode {
+      background-color: #000000;
+      color: #FFFFFF;
+    }
+  </style>
 </head>
-<body class="bg-warm-beige">
-<nav class="fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center">
-  <a href="cart.html" class="flex items-center group">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mr-2 group-hover:text-light-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-    </svg>
-    <span class="text-2xl font-bold text-white group-hover:text-light-gold transition-colors">
-        Back to Cart
-      </span>
-  </a>
-  <h1 class="text-3xl font-bold text-white">Racing Checkout</h1>
-</nav>
+<body class="bg-brand-beige text-brand-dark-gray">
+<header class="bg-brand-black text-brand-white p-4 flex justify-between items-center">
+  <a href="index.html" class="text-2xl font-bold text-brand-light-gold">F1 Shop</a>
+  <nav>
+    <a href="cart.html" class="hover:text-brand-gold mr-4">Back to Cart</a>
+    <button id="darkModeToggle" class="hover:text-brand-gold">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+  </nav>
+</header>
 
-<div class="container mx-auto px-4 pt-24">
-  <div id="checkout-error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden mb-6" role="alert">
-    <strong class="font-bold">Error!</strong>
-    <span id="error-message" class="block sm:inline"></span>
-  </div>
+<div class="container mx-auto mt-8 p-4">
+  <h1 class="text-3xl font-bold mb-6 text-brand-light-gold">Checkout</h1>
 
   <div class="grid md:grid-cols-2 gap-8">
+    <!-- Order Summary -->
     <div>
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold text-black mb-4">Order Summary</h2>
-        <div id="checkout-items" class="space-y-4"></div>
-        <div class="border-t mt-4 pt-4">
-          <div id="total-amount" class="text-right text-2xl font-bold text-gold"></div>
+      <div class="bg-brand-dark-gray p-6 rounded-lg mb-6">
+        <h2 class="text-brand-white text-xl font-bold mb-4">Order Summary</h2>
+        <div id="checkoutItems" class="space-y-4">
+          <!-- Checkout items will be dynamically inserted here -->
         </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-lg p-6">
-        <h2 class="text-2xl font-bold text-black mb-4">Payment Method</h2>
-        <div id="paypal-button-container" class="w-full"></div>
+        <div class="border-t border-brand-bronze mt-4 pt-4">
+          <div class="flex justify-between">
+            <span class="text-brand-white">Total</span>
+            <span id="checkoutTotal" class="text-brand-gold font-bold">$0.00</span>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Checkout Form -->
     <div>
-      <div class="bg-white rounded-xl shadow-lg p-6">
-        <h2 class="text-2xl font-bold text-black mb-4">Shipping Information</h2>
-        <form class="space-y-4">
+      <div class="bg-brand-white p-6 rounded-lg">
+        <h2 class="text-brand-dark-gray text-xl font-bold mb-4">Shipping Information</h2>
+        <form id="checkoutForm" class="space-y-4">
           <div>
-            <label class="block text-dark-gray mb-2">Full Name</label>
+            <label class="block text-brand-dark-gray mb-2">Full Name</label>
             <input
                     type="text"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold"
-                    placeholder="F1 Fan Name"
                     required
-            />
+                    class="w-full p-2 border border-brand-bronze rounded"
+                    placeholder="Enter your full name"
+            >
           </div>
           <div>
-            <label class="block text-dark-gray mb-2">Email Address</label>
+            <label class="block text-brand-dark-gray mb-2">Email Address</label>
             <input
                     type="email"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold"
-                    placeholder="f1fan@racing.com"
                     required
-            />
+                    class="w-full p-2 border border-brand-bronze rounded"
+                    placeholder="Enter your email"
+            >
           </div>
           <div>
-            <label class="block text-dark-gray mb-2">Shipping Address</label>
+            <label class="block text-brand-dark-gray mb-2">Shipping Address</label>
             <input
                     type="text"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold"
-                    placeholder="Paddock Lane"
                     required
-            />
+                    class="w-full p-2 border border-brand-bronze rounded"
+                    placeholder="Street Address"
+            >
           </div>
           <div class="grid grid-cols-3 gap-4">
             <div>
-              <label class="block text-dark-gray mb-2">City</label>
+              <label class="block text-brand-dark-gray mb-2">City</label>
               <input
                       type="text"
-                      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold"
-                      placeholder="Racing City"
                       required
-              />
+                      class="w-full p-2 border border-brand-bronze rounded"
+                      placeholder="City"
+              >
             </div>
             <div>
-              <label class="block text-dark-gray mb-2">Country</label>
+              <label class="block text-brand-dark-gray mb-2">State</label>
               <input
                       type="text"
-                      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold"
-                      placeholder="Circuit"
                       required
-              />
+                      class="w-full p-2 border border-brand-bronze rounded"
+                      placeholder="State"
+              >
             </div>
             <div>
-              <label class="block text-dark-gray mb-2">Postal Code</label>
+              <label class="block text-brand-dark-gray mb-2">Zip</label>
               <input
                       type="text"
-                      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold"
-                      placeholder="GP-CODE"
                       required
-              />
+                      class="w-full p-2 border border-brand-bronze rounded"
+                      placeholder="Zip"
+              >
             </div>
           </div>
         </form>
+
+        <div id="paypal-button-container" class="mt-6"></div>
       </div>
     </div>
   </div>
 </div>
 
-<script src="cart.js"></script>
 <script>
-  function showError(message) {
-    const errorContainer = document.getElementById('checkout-error');
-    const errorMessage = document.getElementById('error-message');
+  // Dark Mode Toggle
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const body = document.body;
 
-    errorMessage.textContent = message;
-    errorContainer.classList.remove('hidden');
+  // Check initial dark mode state
+  if (localStorage.getItem('darkMode') === 'true') {
+    body.classList.add('dark-mode');
   }
 
-  function renderCheckoutItems() {
-    const items = JSON.parse(localStorage.getItem('cart') || '[]');
-    const checkoutItemsContainer = document.getElementById('checkout-items');
-    const totalAmountContainer = document.getElementById('total-amount');
-    const paypalContainer = document.getElementById('paypal-button-container');
+  darkModeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+  });
 
-    if (items.length === 0) {
-      checkoutItemsContainer.innerHTML = `
-          <p class="text-center text-gray-500">Your racing cart is empty</p>
-        `;
-      totalAmountContainer.textContent = 'Total: $0.00';
-      paypalContainer.innerHTML = '';
-      showError('Cannot proceed to checkout with an empty cart');
-      return;
-    }
+  // Checkout Process
+  const checkoutItemsContainer = document.getElementById('checkoutItems');
+  const checkoutTotalElement = document.getElementById('checkoutTotal');
+  const paypalButtonContainer = document.getElementById('paypal-button-container');
 
-    // Clear any previous errors
-    document.getElementById('checkout-error').classList.add('hidden');
+  function renderCheckoutSummary() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    checkoutItemsContainer.innerHTML = items.map(item => `
-        <div class="flex justify-between border-b py-2">
-          <div class="flex items-center">
-            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover mr-4 rounded">
-            <div>
-              <span class="font-semibold">${item.name}</span>
-              <p class="text-gray-600">$${item.price.toFixed(2)} x ${item.quantity || 1}</p>
-            </div>
-          </div>
-          <span class="font-bold">$${((item.price * (item.quantity || 1)).toFixed(2))}</span>
-        </div>
-      `).join('');
+    // Clear previous items
+    checkoutItemsContainer.innerHTML = '';
 
-    const total = items.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-    totalAmountContainer.textContent = `Total: $${total.toFixed(2)}`;
+    // Render checkout items
+    let total = 0;
+    cart.forEach(item => {
+      const itemTotal = item.price * item.quantity;
+      total += itemTotal;
+
+      const checkoutItemElement = document.createElement('div');
+      checkoutItemElement.className = 'flex justify-between text-brand-white';
+      checkoutItemElement.innerHTML = `
+                    <span>${item.name} × ${item.quantity}</span>
+                    <span>$${itemTotal.toFixed(2)}</span>
+                `;
+
+      checkoutItemsContainer.appendChild(checkoutItemElement);
+    });
+
+    // Update total
+    checkoutTotalElement.textContent = `$${total.toFixed(2)}`;
 
     // Setup PayPal buttons
-    setupPayPalButtons(total);
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: total.toFixed(2)
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('Transaction completed by ' + details.payer.name.given_name);
+          localStorage.removeItem('cart');
+          window.location.href = 'index.html';
+        });
+      }
+    }).render('#paypal-button-container');
   }
 
-  function setupPayPalButtons(total) {
-    try {
-      paypal.Buttons({
-        createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: total.toFixed(2)
-              }
-            }]
-          });
-        },
-        onApprove: function(data, actions) {
-          return actions.order.capture().then(function(details) {
-            alert('Race-day transaction completed by ' + details.payer.name.given_name);
-            localStorage.removeItem('cart');
-            window.location.href = 'index.html';
-          });
-        },
-        onError: function(err) {
-          showError('Pit stop error: Transaction failed. Please try again.');
-          console.error('PayPal Error:', err);
-        }
-      }).render('#paypal-button-container');
-    } catch (error) {
-      showError('Engine failure: Payment options could not load.');
-      console.error('PayPal Button Error:', error);
-    }
-  }
-
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', renderCheckoutItems);
+  // Initial render
+  renderCheckoutSummary();
 </script>
 </body>
 </html>

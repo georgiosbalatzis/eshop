@@ -1,179 +1,101 @@
-/* F1 E-Shop Custom Styles */
-:root {
-    --color-black: #000000;
-    --color-gold: #CD7F32;
-    --color-dark-gray: #3A3B3C;
-    --color-light-gold: #D4AF37;
-    --color-white: #FFFFFF;
-    --color-warm-beige: #F5F5DC;
-    --color-bronze: #8B7355;
+/* Dark Mode Styles */
+body.dark {
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
-/* Global Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+body.dark .bg-brand-beige {
+    background-color: #3A3B3C;
 }
 
-@keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
+body.dark .text-brand-dark-gray {
+    color: #FFFFFF;
 }
 
-body {
-    background-color: var(--color-warm-beige);
-    color: var(--color-black);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
+body.dark #categoryFilters {
+    background-color: #1A1A1A;
 }
 
-/* F1 Navigation */
-nav {
-    background: linear-gradient(to right, var(--color-black), var(--color-dark-gray));
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+body.dark .bg-brand-white {
+    background-color: #2A2A2A;
+    color: #FFFFFF;
 }
 
-nav a, nav button {
-    color: var(--color-white);
-    transition: all 0.3s ease;
+body.dark .text-brand-light-gold {
+    color: #D4AF37;
 }
 
-nav a:hover, nav button:hover {
-    color: var(--color-light-gold);
-    transform: scale(1.05);
+body.dark .product-card {
+    background-color: #2A2A2A;
+    border-color: #8B7355;
 }
 
-/* Product Card Styling */
+body.dark .text-brand-bronze {
+    color: #CD7F32;
+}
+
+/* Error Container */
+#error-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #FF0000;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 10px;
+    z-index: 1000;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #3A3B3C;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CD7F32;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #D4AF37;
+}
+
+/* Additional Subtle Animations */
 .product-card {
-    background: var(--color-white);
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
-    animation: fadeIn 0.5s ease forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.product-card img {
-    transition: transform 0.3s ease;
+.wishlist-toggle {
+    transition: color 0.3s ease;
 }
 
-.product-card:hover img {
-    transform: scale(1.1);
-}
-
-.product-card .add-to-cart {
-    background: linear-gradient(to right, var(--color-gold), var(--color-light-gold));
-    color: var(--color-white);
-    border: none;
-    transition: all 0.3s ease;
-}
-
-.product-card .add-to-cart:hover {
-    background: linear-gradient(to right, var(--color-bronze), var(--color-gold));
-    transform: scale(1.05);
-}
-
-/* Cart and Checkout Styling */
-.cart-item {
-    background: var(--color-white);
-    border-left: 4px solid var(--color-gold);
-    transition: all 0.3s ease;
-}
-
-.cart-item:hover {
-    background: rgba(205, 127, 50, 0.05);
-    transform: translateX(10px);
-}
-
-/* Buttons */
-.btn-primary {
-    background: var(--color-black);
-    color: var(--color-white);
-    border: 2px solid var(--color-gold);
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background: var(--color-gold);
-    color: var(--color-black);
-    transform: scale(1.05);
-}
-
-/* Notification Badge */
-#cart-notification {
-    background: var(--color-gold);
-    color: var(--color-white);
-    animation: shimmer 1.5s infinite linear;
-    background: linear-gradient(
-            to right,
-            var(--color-gold) 0%,
-            var(--color-light-gold) 50%,
-            var(--color-gold) 100%
-    );
-    background-size: 1000px 100%;
-}
-
-/* Product Details Page */
-.product-details {
-    background: var(--color-white);
-    border-radius: 15px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-}
-
-.product-details img {
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-}
-
-.product-details img:hover {
-    transform: scale(1.05);
+.wishlist-toggle:hover {
+    transform: scale(1.2);
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    .product-card, .product-details {
-        margin: 10px;
+    .flex {
+        flex-direction: column;
     }
-}
 
-/* Accessibility and Smooth Interactions */
-* {
-    scroll-behavior: smooth;
-    transition: all 0.3s ease;
-}
+    #categoryFilters {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 
-/* Error and Alert Styling */
-.error-alert {
-    background: linear-gradient(to right, #8B0000, #CD5C5C);
-    color: var(--color-white);
-    border-radius: 10px;
-    animation: fadeIn 0.5s ease;
-}
-
-/* Checkout Progress */
-.checkout-step {
-    position: relative;
-    display: inline-block;
-}
-
-.checkout-step::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: var(--color-gold);
-    transition: width 0.3s ease;
-}
-
-.checkout-step:hover::after {
-    width: 100%;
+    #productGrid {
+        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
