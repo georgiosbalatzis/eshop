@@ -1,37 +1,107 @@
+/* Racing Theme Styles */
+body {
+    background-color: var(--racing-white, #FAFAFA);
+    color: var(--asphalt-gray, #4A4A4A);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Racing-themed Headers */
+header {
+    background-color: var(--racing-green, #003B2B);
+    border-bottom: 3px solid var(--gold-accent, #CBA135);
+}
+
+/* Logo styling */
+.logo h1 {
+    color: var(--gold-accent, #CBA135);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Navigation Links */
+nav a {
+    color: var(--racing-white, #FAFAFA);
+    transition: color 0.2s, transform 0.2s;
+}
+
+nav a:hover {
+    color: var(--gold-accent, #CBA135);
+    transform: translateY(-2px);
+}
+
 /* Dark Mode Styles */
 body.dark {
-    background-color: #000000;
-    color: #FFFFFF;
+    background-color: var(--racing-black, #121212);
+    color: var(--metallic-silver, #B0B0B0);
 }
 
-body.dark .bg-brand-beige {
-    background-color: #3A3B3C;
+body.dark .bg-racing-white {
+    background-color: var(--carbon-gray, #2F2F2F);
+    color: var(--metallic-silver, #B0B0B0);
 }
 
-body.dark .text-brand-dark-gray {
-    color: #FFFFFF;
+/* Product Cards */
+.product-card {
+    background-color: var(--racing-white, #FAFAFA);
+    border: 1px solid var(--gold-accent, #CBA135);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-body.dark #categoryFilters {
-    background-color: #1A1A1A;
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    border-color: var(--champagne-gold, #F8E9A1);
 }
 
-body.dark .bg-brand-white {
-    background-color: #2A2A2A;
-    color: #FFFFFF;
+.product-card h3 {
+    color: var(--racing-green, #003B2B);
+    font-weight: bold;
 }
 
-body.dark .text-brand-light-gold {
-    color: #D4AF37;
+.product-card .price {
+    color: var(--gold-accent, #CBA135);
+    font-weight: bold;
 }
 
-body.dark .product-card {
-    background-color: #2A2A2A;
-    border-color: #8B7355;
+/* Buttons */
+.btn-primary {
+    background-color: var(--racing-green, #003B2B);
+    color: var(--racing-white, #FAFAFA);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
-body.dark .text-brand-bronze {
-    color: #CD7F32;
+.btn-primary:hover {
+    background-color: var(--gold-accent, #CBA135);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--carbon-gray, #2F2F2F);
+    color: var(--racing-white, #FAFAFA);
+    border: 1px solid var(--gold-accent, #CBA135);
+}
+
+.btn-secondary:hover {
+    background-color: var(--pit-lane-gray, #6A6A6A);
+}
+
+/* Wishlist Heart Icon */
+.wishlist-toggle {
+    transition: transform 0.2s, color 0.2s;
+}
+
+.wishlist-toggle:hover {
+    transform: scale(1.2);
+    color: var(--racing-red, #D50000);
+}
+
+.wishlist-toggle.active {
+    color: var(--racing-red, #D50000);
 }
 
 /* Error Container */
@@ -40,47 +110,79 @@ body.dark .text-brand-bronze {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #FF0000;
-    color: #FFFFFF;
+    background-color: var(--racing-red, #D50000);
+    color: var(--racing-white, #FAFAFA);
     text-align: center;
     padding: 10px;
     z-index: 1000;
 }
 
-/* Scrollbar Styling */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #3A3B3C;
+    background: var(--carbon-gray, #2F2F2F);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #CD7F32;
+    background: var(--gold-accent, #CBA135);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #D4AF37;
+    background: var(--champagne-gold, #F8E9A1);
 }
 
-/* Additional Subtle Animations */
-.product-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Filter Sidebar */
+#categoryFilters {
+    background-color: var(--carbon-gray, #2F2F2F);
+    color: var(--racing-white, #FAFAFA);
+    border-radius: 8px;
+    padding: 16px;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+/* Checkout Form */
+.checkout-form input,
+.checkout-form select,
+.checkout-form textarea {
+    border: 1px solid var(--pit-lane-gray, #6A6A6A);
+    border-radius: 4px;
+    padding: 8px 12px;
+    background-color: var(--racing-white, #FAFAFA);
+    transition: border-color 0.3s;
 }
 
-.wishlist-toggle {
-    transition: color 0.3s ease;
+.checkout-form input:focus,
+.checkout-form select:focus,
+.checkout-form textarea:focus {
+    outline: none;
+    border-color: var(--gold-accent, #CBA135);
+    box-shadow: 0 0 0 2px rgba(203, 161, 53, 0.2);
 }
 
-.wishlist-toggle:hover {
-    transform: scale(1.2);
+/* Racing stripe accent */
+.racing-stripe {
+    background: linear-gradient(90deg, var(--racing-green, #003B2B) 0%, var(--racing-green, #003B2B) 70%, var(--gold-accent, #CBA135) 70%, var(--gold-accent, #CBA135) 100%);
+    height: 4px;
+    width: 100%;
+}
+
+/* Hero section enhancement */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold-accent, #CBA135) 0%, var(--racing-green, #003B2B) 100%);
 }
 
 /* Responsive Adjustments */
@@ -97,5 +199,10 @@ body.dark .text-brand-bronze {
     #productGrid {
         width: 100%;
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Adjust racing stripe for mobile */
+    .racing-stripe {
+        height: 3px;
     }
 }

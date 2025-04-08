@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout</title>
+  <title>Checkout - F1 Gear</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
   <script>
@@ -11,34 +11,29 @@
       theme: {
         extend: {
           colors: {
-            'brand-black': '#000000',
-            'brand-gold': '#CD7F32',
-            'brand-dark-gray': '#3A3B3C',
-            'brand-light-gold': '#D4AF37',
-            'brand-white': '#FFFFFF',
-            'brand-beige': '#F5F5DC',
-            'brand-bronze': '#8B7355'
+            'racing-green': '#003B2B',     // Primary background
+            'metallic-silver': '#B0B0B0',  // Text, clean look
+            'gold-accent': '#CBA135',      // Luxury accents
+            'carbon-gray': '#2F2F2F',      // Secondary sections
+            'racing-white': '#FAFAFA',     // Product cards, highlights
+            'racing-red': '#D50000',       // For error states and alerts
+            'racing-black': '#121212',     // Deep background for dark mode
+            'asphalt-gray': '#4A4A4A',     // Text on light backgrounds
+            'champagne-gold': '#F8E9A1',   // Lighter gold variant
+            'pit-lane-gray': '#6A6A6A'     // Mid-tone gray for subtle elements
           }
         }
       }
     }
   </script>
-  <style>
-    body {
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .dark-mode {
-      background-color: #000000;
-      color: #FFFFFF;
-    }
-  </style>
+  <link href="style.css" rel="stylesheet">
 </head>
-<body class="bg-brand-beige text-brand-dark-gray">
-<header class="bg-brand-black text-brand-white p-4 flex justify-between items-center">
-  <a href="index.html" class="text-2xl font-bold text-brand-light-gold">F1 Shop</a>
+<body class="bg-racing-white text-asphalt-gray">
+<header class="bg-racing-green text-racing-white p-4 flex justify-between items-center">
+  <a href="index.html" class="text-2xl font-bold text-gold-accent">F1 GEAR</a>
   <nav>
-    <a href="cart.html" class="hover:text-brand-gold mr-4">Back to Cart</a>
-    <button id="darkModeToggle" class="hover:text-brand-gold">
+    <a href="cart.html" class="hover:text-gold-accent mr-4 transition-all">Back to Cart</a>
+    <button id="darkModeToggle" class="hover:text-gold-accent transition-all">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
       </svg>
@@ -46,94 +41,137 @@
   </nav>
 </header>
 
+<!-- Racing stripe accent -->
+<div class="racing-stripe"></div>
+
 <div class="container mx-auto mt-8 p-4">
-  <h1 class="text-3xl font-bold mb-6 text-brand-light-gold">Checkout</h1>
+  <h1 class="text-3xl font-bold mb-6 text-racing-green">Checkout</h1>
 
   <div class="grid md:grid-cols-2 gap-8">
     <!-- Order Summary -->
     <div>
-      <div class="bg-brand-dark-gray p-6 rounded-lg mb-6">
-        <h2 class="text-brand-white text-xl font-bold mb-4">Order Summary</h2>
+      <div class="bg-carbon-gray p-6 rounded-lg mb-6 shadow-lg border-t-4 border-gold-accent">
+        <h2 class="text-racing-white text-xl font-bold mb-4">Order Summary</h2>
         <div id="checkoutItems" class="space-y-4">
           <!-- Checkout items will be dynamically inserted here -->
         </div>
-        <div class="border-t border-brand-bronze mt-4 pt-4">
+        <div class="border-t border-pit-lane-gray mt-4 pt-4">
           <div class="flex justify-between">
-            <span class="text-brand-white">Total</span>
-            <span id="checkoutTotal" class="text-brand-gold font-bold">$0.00</span>
+            <span class="text-racing-white">Total</span>
+            <span id="checkoutTotal" class="text-gold-accent font-bold">$0.00</span>
           </div>
+        </div>
+      </div>
+
+      <!-- Shipping options -->
+      <div class="bg-racing-white p-6 rounded-lg shadow-lg border border-pit-lane-gray mb-6">
+        <h2 class="text-racing-green text-xl font-bold mb-4">Shipping Method</h2>
+        <div class="space-y-3">
+          <label class="flex items-center p-3 border border-pit-lane-gray rounded-lg cursor-pointer hover:border-gold-accent transition-colors">
+            <input type="radio" name="shipping" value="standard" class="mr-3 text-racing-green" checked>
+            <div>
+              <span class="block font-medium text-racing-green">Standard Shipping</span>
+              <span class="text-sm text-pit-lane-gray">3-5 business days</span>
+            </div>
+            <span class="ml-auto font-medium">$4.99</span>
+          </label>
+
+          <label class="flex items-center p-3 border border-pit-lane-gray rounded-lg cursor-pointer hover:border-gold-accent transition-colors">
+            <input type="radio" name="shipping" value="express" class="mr-3 text-racing-green">
+            <div>
+              <span class="block font-medium text-racing-green">Express Shipping</span>
+              <span class="text-sm text-pit-lane-gray">1-2 business days</span>
+            </div>
+            <span class="ml-auto font-medium">$12.99</span>
+          </label>
         </div>
       </div>
     </div>
 
     <!-- Checkout Form -->
     <div>
-      <div class="bg-brand-white p-6 rounded-lg">
-        <h2 class="text-brand-dark-gray text-xl font-bold mb-4">Shipping Information</h2>
-        <form id="checkoutForm" class="space-y-4">
+      <div class="bg-racing-white p-6 rounded-lg shadow-lg border border-pit-lane-gray">
+        <h2 class="text-racing-green text-xl font-bold mb-4">Shipping Information</h2>
+        <form id="checkoutForm" class="space-y-4 checkout-form">
           <div>
-            <label class="block text-brand-dark-gray mb-2">Full Name</label>
+            <label class="block text-racing-green mb-2 font-medium">Full Name</label>
             <input
                     type="text"
                     required
-                    class="w-full p-2 border border-brand-bronze rounded"
+                    class="w-full p-2 border border-pit-lane-gray rounded focus:border-gold-accent focus:ring focus:ring-gold-accent focus:ring-opacity-20 outline-none"
                     placeholder="Enter your full name"
             >
           </div>
           <div>
-            <label class="block text-brand-dark-gray mb-2">Email Address</label>
+            <label class="block text-racing-green mb-2 font-medium">Email Address</label>
             <input
                     type="email"
                     required
-                    class="w-full p-2 border border-brand-bronze rounded"
+                    class="w-full p-2 border border-pit-lane-gray rounded focus:border-gold-accent focus:ring focus:ring-gold-accent focus:ring-opacity-20 outline-none"
                     placeholder="Enter your email"
             >
           </div>
           <div>
-            <label class="block text-brand-dark-gray mb-2">Shipping Address</label>
+            <label class="block text-racing-green mb-2 font-medium">Shipping Address</label>
             <input
                     type="text"
                     required
-                    class="w-full p-2 border border-brand-bronze rounded"
+                    class="w-full p-2 border border-pit-lane-gray rounded focus:border-gold-accent focus:ring focus:ring-gold-accent focus:ring-opacity-20 outline-none"
                     placeholder="Street Address"
             >
           </div>
           <div class="grid grid-cols-3 gap-4">
             <div>
-              <label class="block text-brand-dark-gray mb-2">City</label>
+              <label class="block text-racing-green mb-2 font-medium">City</label>
               <input
                       type="text"
                       required
-                      class="w-full p-2 border border-brand-bronze rounded"
+                      class="w-full p-2 border border-pit-lane-gray rounded focus:border-gold-accent focus:ring focus:ring-gold-accent focus:ring-opacity-20 outline-none"
                       placeholder="City"
               >
             </div>
             <div>
-              <label class="block text-brand-dark-gray mb-2">State</label>
+              <label class="block text-racing-green mb-2 font-medium">State</label>
               <input
                       type="text"
                       required
-                      class="w-full p-2 border border-brand-bronze rounded"
+                      class="w-full p-2 border border-pit-lane-gray rounded focus:border-gold-accent focus:ring focus:ring-gold-accent focus:ring-opacity-20 outline-none"
                       placeholder="State"
               >
             </div>
             <div>
-              <label class="block text-brand-dark-gray mb-2">Zip</label>
+              <label class="block text-racing-green mb-2 font-medium">Zip</label>
               <input
                       type="text"
                       required
-                      class="w-full p-2 border border-brand-bronze rounded"
+                      class="w-full p-2 border border-pit-lane-gray rounded focus:border-gold-accent focus:ring focus:ring-gold-accent focus:ring-opacity-20 outline-none"
                       placeholder="Zip"
               >
             </div>
           </div>
-        </form>
 
-        <div id="paypal-button-container" class="mt-6"></div>
+          <div class="mt-6 pt-6 border-t border-pit-lane-gray">
+            <h3 class="text-racing-green font-bold mb-4">Payment Method</h3>
+            <div id="paypal-button-container" class="mt-4"></div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Racing-themed footer -->
+<footer class="bg-racing-green text-racing-white mt-12 py-6">
+  <div class="racing-stripe mb-6"></div>
+  <div class="container mx-auto text-center">
+    <p class="text-metallic-silver">&copy; 2025 F1 GEAR. All rights reserved.</p>
+    <div class="flex justify-center space-x-4 mt-4">
+      <a href="#" class="text-metallic-silver hover:text-gold-accent transition-colors">Privacy Policy</a>
+      <a href="#" class="text-metallic-silver hover:text-gold-accent transition-colors">Terms of Service</a>
+      <a href="#" class="text-metallic-silver hover:text-gold-accent transition-colors">Contact Us</a>
+    </div>
+  </div>
+</footer>
 
 <script>
   // Dark Mode Toggle
@@ -142,12 +180,12 @@
 
   // Check initial dark mode state
   if (localStorage.getItem('darkMode') === 'true') {
-    body.classList.add('dark-mode');
+    body.classList.add('dark');
   }
 
   darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+    body.classList.toggle('dark');
+    localStorage.setItem('darkMode', body.classList.contains('dark'));
   });
 
   // Checkout Process
@@ -168,17 +206,48 @@
       total += itemTotal;
 
       const checkoutItemElement = document.createElement('div');
-      checkoutItemElement.className = 'flex justify-between text-brand-white';
+      checkoutItemElement.className = 'flex justify-between text-racing-white border-b border-pit-lane-gray pb-2 mb-2 last:border-0';
       checkoutItemElement.innerHTML = `
-                    <span>${item.name} × ${item.quantity}</span>
-                    <span>$${itemTotal.toFixed(2)}</span>
-                `;
+        <span>${item.name} × ${item.quantity}</span>
+        <span class="font-medium">$${itemTotal.toFixed(2)}</span>
+      `;
 
       checkoutItemsContainer.appendChild(checkoutItemElement);
     });
 
+    // Add shipping cost (default to standard)
+    const shippingCost = 4.99;
+    total += shippingCost;
+
+    const shippingElement = document.createElement('div');
+    shippingElement.className = 'flex justify-between text-racing-white border-b border-pit-lane-gray pb-2 mb-2';
+    shippingElement.innerHTML = `
+      <span>Shipping (Standard)</span>
+      <span class="font-medium">$${shippingCost.toFixed(2)}</span>
+    `;
+    checkoutItemsContainer.appendChild(shippingElement);
+
     // Update total
     checkoutTotalElement.textContent = `$${total.toFixed(2)}`;
+
+    // Listen for shipping method changes
+    document.querySelectorAll('input[name="shipping"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        const shippingMethod = this.value;
+        const newShippingCost = shippingMethod === 'express' ? 12.99 : 4.99;
+
+        // Update shipping display
+        shippingElement.innerHTML = `
+          <span>Shipping (${shippingMethod === 'express' ? 'Express' : 'Standard'})</span>
+          <span class="font-medium">$${newShippingCost.toFixed(2)}</span>
+        `;
+
+        // Update total with new shipping cost
+        const subtotal = total - shippingCost;
+        const newTotal = subtotal + newShippingCost;
+        checkoutTotalElement.textContent = `$${newTotal.toFixed(2)}`;
+      });
+    });
 
     // Setup PayPal buttons
     paypal.Buttons({
@@ -197,6 +266,11 @@
           localStorage.removeItem('cart');
           window.location.href = 'index.html';
         });
+      },
+      style: {
+        color: 'gold',
+        shape: 'rect',
+        layout: 'vertical'
       }
     }).render('#paypal-button-container');
   }

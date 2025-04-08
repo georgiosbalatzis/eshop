@@ -3,41 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shopping Cart</title>
+  <title>Shopping Cart - F1 Gear</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            'brand-black': '#000000',
-            'brand-gold': '#CD7F32',
-            'brand-dark-gray': '#3A3B3C',
-            'brand-light-gold': '#D4AF37',
-            'brand-white': '#FFFFFF',
-            'brand-beige': '#F5F5DC',
-            'brand-bronze': '#8B7355'
+            'racing-green': '#003B2B',     // Primary background
+            'metallic-silver': '#B0B0B0',  // Text, clean look
+            'gold-accent': '#CBA135',      // Luxury accents
+            'carbon-gray': '#2F2F2F',      // Secondary sections
+            'racing-white': '#FAFAFA',     // Product cards, highlights
+            'racing-red': '#D50000',       // For error states and alerts
+            'racing-black': '#121212',     // Deep background for dark mode
+            'asphalt-gray': '#4A4A4A',     // Text on light backgrounds
+            'champagne-gold': '#F8E9A1',   // Lighter gold variant
+            'pit-lane-gray': '#6A6A6A'     // Mid-tone gray for subtle elements
           }
         }
       }
     }
   </script>
-  <style>
-    body {
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .dark-mode {
-      background-color: #000000;
-      color: #FFFFFF;
-    }
-  </style>
+  <link href="style.css" rel="stylesheet">
 </head>
-<body class="bg-brand-beige text-brand-dark-gray">
-<header class="bg-brand-black text-brand-white p-4 flex justify-between items-center">
-  <a href="index.html" class="text-2xl font-bold text-brand-light-gold">F1 Shop</a>
+<body class="bg-racing-white text-asphalt-gray">
+<header class="bg-racing-green text-racing-white p-4 flex justify-between items-center">
+  <a href="index.html" class="text-2xl font-bold text-gold-accent">F1 GEAR</a>
   <nav>
-    <a href="index.html" class="hover:text-brand-gold mr-4">Continue Shopping</a>
-    <button id="darkModeToggle" class="hover:text-brand-gold">
+    <a href="index.html" class="hover:text-gold-accent mr-4 transition-all">Continue Shopping</a>
+    <button id="darkModeToggle" class="hover:text-gold-accent transition-all">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
       </svg>
@@ -45,21 +40,24 @@
   </nav>
 </header>
 
+<!-- Racing stripe accent -->
+<div class="racing-stripe"></div>
+
 <div class="container mx-auto mt-8 p-4">
-  <h1 class="text-3xl font-bold mb-6 text-brand-light-gold">Your Cart</h1>
+  <h1 class="text-3xl font-bold mb-6 text-racing-green">Your Cart</h1>
 
   <div id="cartItems" class="space-y-4 mb-8">
     <!-- Cart items will be dynamically inserted here -->
   </div>
 
-  <div class="bg-brand-dark-gray p-6 rounded-lg">
+  <div class="bg-carbon-gray p-6 rounded-lg shadow-lg border-t-4 border-gold-accent">
     <div class="flex justify-between mb-4">
-      <span class="text-brand-white text-xl">Total:</span>
-      <span id="cartTotal" class="text-brand-gold text-2xl font-bold">$0.00</span>
+      <span class="text-racing-white text-xl">Total:</span>
+      <span id="cartTotal" class="text-gold-accent text-2xl font-bold">$0.00</span>
     </div>
     <button
             id="checkoutBtn"
-            class="w-full bg-brand-gold text-brand-white py-3 rounded hover:bg-brand-bronze transition"
+            class="w-full bg-racing-green text-racing-white py-3 rounded hover:bg-gold-accent transition-colors duration-300 font-medium"
     >
       Proceed to Checkout
     </button>
@@ -73,12 +71,12 @@
 
   // Check initial dark mode state
   if (localStorage.getItem('darkMode') === 'true') {
-    body.classList.add('dark-mode');
+    body.classList.add('dark');
   }
 
   darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+    body.classList.toggle('dark');
+    localStorage.setItem('darkMode', body.classList.contains('dark'));
   });
 
   // Cart Management
@@ -92,42 +90,74 @@
     // Clear previous items
     cartItemsContainer.innerHTML = '';
 
+    // Check if cart is empty
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = `
+        <div class="text-center py-12">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-pit-lane-gray mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <h2 class="text-2xl font-bold text-racing-green mb-2">Your cart is empty</h2>
+          <p class="text-asphalt-gray mb-6">Looks like you haven't added any items yet.</p>
+          <a href="index.html" class="bg-racing-green text-racing-white px-6 py-3 rounded-md hover:bg-gold-accent transition-colors">
+            Discover F1 Gear
+          </a>
+        </div>
+      `;
+
+      // Update total
+      cartTotalElement.textContent = `$0.00`;
+
+      // Disable checkout button
+      checkoutBtn.disabled = true;
+      checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      return;
+    }
+
     // Render cart items
     let total = 0;
     cart.forEach((item, index) => {
       const cartItemElement = document.createElement('div');
       cartItemElement.className = `
-                    bg-brand-white
+                    bg-racing-white
                     p-4
                     rounded-lg
                     flex
                     justify-between
                     items-center
+                    shadow-md
+                    border-l-4
+                    border-racing-green
                 `;
 
       const itemTotal = item.price * item.quantity;
       total += itemTotal;
 
       cartItemElement.innerHTML = `
-                    <div>
-                        <h3 class="text-brand-dark-gray font-bold">${item.name}</h3>
-                        <p class="text-brand-gold">
-                            $${item.price.toFixed(2)} × ${item.quantity}
-                        </p>
+                    <div class="flex items-center space-x-4">
+                        <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded border border-gold-accent">
+                        <div>
+                            <h3 class="text-racing-green font-bold">${item.name}</h3>
+                            <p class="text-gold-accent">
+                                ${item.price.toFixed(2)} × ${item.quantity}
+                            </p>
+                        </div>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <span class="text-brand-dark-gray font-bold">
-                            $${itemTotal.toFixed(2)}
+                        <span class="text-racing-green font-bold">
+                            ${itemTotal.toFixed(2)}
                         </span>
                         <button
                             onclick="removeFromCart(${index})"
                             class="
-                                bg-brand-gold
-                                text-brand-white
+                                bg-racing-green
+                                text-racing-white
                                 px-3
                                 py-1
                                 rounded
-                                hover:bg-brand-bronze
+                                hover:bg-racing-red
+                                transition-colors
                             "
                         >
                             Remove
@@ -139,7 +169,7 @@
     });
 
     // Update total
-    cartTotalElement.textContent = `$${total.toFixed(2)}`;
+    cartTotalElement.textContent = `${total.toFixed(2)}`;
 
     // Toggle checkout button state
     checkoutBtn.disabled = cart.length === 0;
@@ -162,5 +192,18 @@
   // Initial render
   renderCart();
 </script>
+
+<!-- Racing-themed footer -->
+<footer class="bg-racing-green text-racing-white mt-12 py-6">
+  <div class="racing-stripe mb-6"></div>
+  <div class="container mx-auto text-center">
+    <p class="text-metallic-silver">&copy; 2025 F1 GEAR. All rights reserved.</p>
+    <div class="flex justify-center space-x-4 mt-4">
+      <a href="#" class="text-metallic-silver hover:text-gold-accent transition-colors">Privacy Policy</a>
+      <a href="#" class="text-metallic-silver hover:text-gold-accent transition-colors">Terms of Service</a>
+      <a href="#" class="text-metallic-silver hover:text-gold-accent transition-colors">Contact Us</a>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
