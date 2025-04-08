@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eShop</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="bg-blue-500 p-4 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-white">My eShop</h1>
+  <a href="cart.html" class="text-white hover:bg-blue-600 px-3 py-2 rounded">
+    🛒 Cart
+  </a>
+</nav>
+<div id="products" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4"></div>
+<script src="config.js"></script>
+<script src="products.js"></script>
+<script src="cart.js"></script>
+</body>
+</html>

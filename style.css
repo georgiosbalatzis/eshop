@@ -1,0 +1,10 @@
+/* You can add custom styles here if needed */
+body {
+    background-color: #f4f4f4;
+}
+
+/* Optional: Make images responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}

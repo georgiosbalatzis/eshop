@@ -1,0 +1,2 @@
+// Google Sheets CSV URL for product data
+const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT0OVN9h7XTQSvlf4SFMoYp8jMqQ1fYWVV8IGt8hVLWUDI57JhHILTbGy_pJQMyzFKpooCQCOBWdqaa/pub?output=csv";
