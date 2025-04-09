@@ -1100,5 +1100,227 @@ function initApp() {
     }
 }
 
+// Mobile Filter Button Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Create mobile filter button
+    createMobileFilterButton();
+
+    // Create mobile filter panel
+    createMobileFilterPanel();
+
+    // Wrap main content for fixed footer
+    setupFixedFooter();
+
+    // Setup mobile filter functionality
+    setupMobileFilter();
+});
+
+// Create mobile filter button
+function createMobileFilterButton() {
+    // Only create if it doesn't exist and we're on a page with product filters
+    if (!document.getElementById('mobile-filter-button') && document.getElementById('categoryFilters')) {
+        const filterButton = document.createElement('button');
+        filterButton.id = 'mobile-filter-button';
+        filterButton.setAttribute('aria-label', 'Open filters');
+        filterButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+      </svg>
+    `;
+        document.body.appendChild(filterButton);
+
+        // Add click event
+        filterButton.addEventListener('click', function() {
+            const filterPanel = document.getElementById('mobile-filter-panel');
+            if (filterPanel) {
+                filterPanel.classList.add('active');
+            }
+        });
+    }
+}
+
+// Create mobile filter panel
+function createMobileFilterPanel() {
+    // Only create if it doesn't exist and we're on a page with product filters
+    if (!document.getElementById('mobile-filter-panel') && document.getElementById('categoryFilters')) {
+        const filterPanel = document.createElement('div');
+        filterPanel.id = 'mobile-filter-panel';
+
+        // Get the original filter content
+        const originalFilters = document.getElementById('categoryFilters');
+
+        if (originalFilters) {
+            // Create panel header
+            const header = document.createElement('h3');
+            header.innerHTML = `
+        Filter Products
+        <button class="close-button" aria-label="Close filters">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      `;
+
+            // Create content container
+            const content = document.createElement('div');
+            content.className = 'mobile-filter-content';
+
+            // Clone the filter content
+            content.innerHTML = originalFilters.innerHTML;
+
+            // Add header and content to panel
+            filterPanel.appendChild(header);
+            filterPanel.appendChild(content);
+
+            // Add panel to body
+            document.body.appendChild(filterPanel);
+
+            // Add close functionality
+            const closeButton = filterPanel.querySelector('.close-button');
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    filterPanel.classList.remove('active');
+                });
+            }
+
+            // Close panel when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!filterPanel.contains(event.target) && event.target.id !== 'mobile-filter-button') {
+                    filterPanel.classList.remove('active');
+                }
+            });
+        }
+    }
+}
+
+// Setup fixed footer and scrollable content
+function setupFixedFooter() {
+    // Check if it's already set up
+    if (!document.getElementById('main-content')) {
+        // Find all content between header and footer
+        const header = document.querySelector('header');
+        const footer = document.querySelector('footer');
+
+        if (header && footer) {
+            // Create main content wrapper
+            const mainContent = document.createElement('div');
+            mainContent.id = 'main-content';
+
+            // Get all elements between header and footer
+            let currentNode = header.nextElementSibling;
+            const nodesToMove = [];
+
+            while (currentNode && currentNode !== footer) {
+                nodesToMove.push(currentNode);
+                currentNode = currentNode.nextElementSibling;
+            }
+
+            // Move them into the main content wrapper
+            nodesToMove.forEach(node => {
+                mainContent.appendChild(node);
+            });
+
+            // Insert main content wrapper between header and footer
+            header.after(mainContent);
+        }
+    }
+}
+
+// Setup filter synchronization between desktop and mobile
+function setupMobileFilter() {
+    // Make sure filter changes in mobile panel affect the original filters and vice versa
+    const mobileFilterPanel = document.getElementById('mobile-filter-panel');
+    const originalFilters = document.getElementById('categoryFilters');
+
+    if (mobileFilterPanel && originalFilters) {
+        // Sync mobile filter checkboxes to desktop
+        const mobileCheckboxes = mobileFilterPanel.querySelectorAll('input[type="checkbox"]');
+        mobileCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Find corresponding desktop checkbox
+                const desktopCheckbox = originalFilters.querySelector(`input[value="${this.value}"]`);
+                if (desktopCheckbox) {
+                    desktopCheckbox.checked = this.checked;
+
+                    // Trigger change event to update products
+                    const event = new Event('change');
+                    desktopCheckbox.dispatchEvent(event);
+                }
+            });
+        });
+
+        // Sync search box if it exists
+        const mobileSearch = mobileFilterPanel.querySelector('#product-search');
+        const desktopSearch = originalFilters.querySelector('#product-search');
+
+        if (mobileSearch && desktopSearch) {
+            mobileSearch.addEventListener('input', function() {
+                desktopSearch.value = this.value;
+
+                // Trigger input event to update products
+                const event = new Event('input');
+                desktopSearch.dispatchEvent(event);
+            });
+        }
+    }
+}
+
+// Update the existing filterProducts function to work with mobile filters
+function enhanceFilterProducts() {
+    // Only modify if the original function exists
+    if (typeof window.filterProducts === 'function') {
+        const originalFilterProducts = window.filterProducts;
+
+        window.filterProducts = function() {
+            // Call the original function
+            originalFilterProducts.apply(this, arguments);
+
+            // After filtering, update mobile filter counts if they exist
+            updateMobileFilterCounts();
+        }
+    }
+}
+
+// Update filter counts in mobile panel
+function updateMobileFilterCounts() {
+    const mobileFilterPanel = document.getElementById('mobile-filter-panel');
+    if (!mobileFilterPanel) return;
+
+    const categoryLabels = mobileFilterPanel.querySelectorAll('label');
+    categoryLabels.forEach(label => {
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            const category = checkbox.value;
+            const count = countProductsByCategory(category);
+
+            // Find or create the count span
+            let countSpan = label.querySelector('.category-count');
+            if (!countSpan) {
+                countSpan = document.createElement('span');
+                countSpan.className = 'category-count text-pit-lane-gray text-xs ml-2';
+                label.appendChild(countSpan);
+            }
+
+            // Update the count
+            countSpan.textContent = `(${count})`;
+        }
+    });
+}
+
+// Count products in each category
+function countProductsByCategory(category) {
+    // Access the products from the global state if available
+    if (window.state && window.state.products) {
+        return window.state.products.filter(product => product.category === category).length;
+    }
+    return 0;
+}
+
+// Call this function after filters and products are initialized
+function initMobileFilters() {
+    enhanceFilterProducts();
+    updateMobileFilterCounts();
+}
+
 // Start the application
 document.addEventListener('DOMContentLoaded', initApp);

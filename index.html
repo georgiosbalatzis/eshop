@@ -70,51 +70,59 @@
 <!-- Racing stripe accent -->
 <div class="racing-stripe"></div>
 
-<!-- Hero Section -->
-<section class="hero-section bg-racing-white p-12 flex items-center">
-  <div class="w-1/2 pr-8">
-    <h1 class="text-5xl font-bold text-racing-green mb-4">F1 Gear Collection</h1>
-    <p class="text-gold-accent text-lg mb-6">Authentic Racing Merchandise for True Fans</p>
-    <a href="#products" class="bg-racing-green text-racing-white px-6 py-3 rounded-md inline-block hover:bg-gold-accent transition-colors duration-300">
-      Explore Collection
-    </a>
-  </div>
-  <div class="w-1/2">
-    <img src="https://via.placeholder.com/500" alt="F1 Gear" class="rounded-lg shadow-lg border-2 border-gold-accent">
-  </div>
-</section>
-
-<!-- Recently Viewed Section -->
-<div class="container mx-auto mt-8 p-4">
-  <div id="recently-viewed-container" class="mb-8">
-    <!-- Recently viewed items will be dynamically inserted here -->
-  </div>
-</div>
-
-<!-- Main Content -->
-<div id="products" class="flex container mx-auto mt-8 px-4 pb-12">
-  <!-- Sidebar Filters -->
-  <aside id="categoryFilters" class="w-1/4 bg-carbon-gray p-4 rounded-lg mr-8">
-    <h2 class="text-racing-white text-xl mb-4 font-bold">Categories</h2>
-    <div class="mb-4">
-      <input
-              type="text"
-              id="product-search"
-              placeholder="Search F1 Gear"
-              class="w-full p-2 rounded bg-racing-white text-asphalt-gray border border-gold-accent focus:outline-none focus:ring-2 focus:ring-gold-accent"
-      >
+<!-- Main content wrapper for fixed footer -->
+<div id="main-content">
+  <!-- Hero Section -->
+  <section class="hero-section bg-racing-white p-12 flex items-center">
+    <div class="w-1/2 pr-8">
+      <h1 class="text-5xl font-bold text-racing-green mb-4">F1 Gear Collection</h1>
+      <p class="text-gold-accent text-lg mb-6">Authentic Racing Merchandise for True Fans</p>
+      <a href="#products" class="bg-racing-green text-racing-white px-6 py-3 rounded-md inline-block hover:bg-gold-accent transition-colors duration-300">
+        Explore Collection
+      </a>
     </div>
-    <div id="filterContainer" class="space-y-2"></div>
-  </aside>
+    <div class="w-1/2">
+      <img src="https://via.placeholder.com/500" alt="F1 Gear" class="rounded-lg shadow-lg border-2 border-gold-accent">
+    </div>
+  </section>
 
-  <!-- Product Grid -->
-  <main id="productGrid" class="w-3/4 grid grid-cols-3 gap-4">
-    <!-- Products will be dynamically inserted here -->
-  </main>
+  <!-- Recently Viewed Section -->
+  <div class="container mx-auto mt-8 p-4">
+    <div id="recently-viewed-container" class="mb-8">
+      <!-- Recently viewed items will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="products" class="flex container mx-auto mt-8 px-4 pb-12">
+    <!-- Sidebar Filters -->
+    <aside id="categoryFilters" class="w-1/4 bg-carbon-gray p-4 rounded-lg mr-8">
+      <h2 class="text-racing-white text-xl mb-4 font-bold">Categories</h2>
+      <div class="mb-4">
+        <input
+                type="text"
+                id="product-search"
+                placeholder="Search F1 Gear"
+                class="w-full p-2 rounded bg-racing-white text-asphalt-gray border border-gold-accent focus:outline-none focus:ring-2 focus:ring-gold-accent"
+        >
+      </div>
+      <div id="filterContainer" class="space-y-2"></div>
+    </aside>
+
+    <!-- Product Grid -->
+    <main id="productGrid" class="w-3/4 grid grid-cols-3 gap-4">
+      <!-- Products will be dynamically inserted here -->
+    </main>
+  </div>
+
+  <!-- Notification Container -->
+  <div id="notification-container" class="fixed top-4 right-4 z-50"></div>
+
+  <!-- Error Container -->
+  <div id="error-container" class="hidden"></div>
 </div>
 
 <!-- Footer with racing stripe -->
-<!-- Footer - Copy this entire section into all HTML files -->
 <footer class="bg-racing-green text-racing-white mt-8 py-8">
   <div class="racing-stripe mb-8"></div>
   <div class="container mx-auto px-4">
@@ -225,8 +233,29 @@
   </div>
 </footer>
 
-<!-- ✅ Removed duplicate footer social & copyright sections -->
+<!-- Mobile Filter Button -->
+<button id="mobile-filter-button" aria-label="Open filters">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+  </svg>
+</button>
 
+<!-- Mobile Filter Panel -->
+<div id="mobile-filter-panel">
+  <h3>
+    Filter Products
+    <button class="close-button" aria-label="Close filters">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </h3>
+  <div class="mobile-filter-content">
+    <!-- Filter content will be cloned here via JavaScript -->
+  </div>
+</div>
+
+<!-- Mobile Navigation for Small Screens -->
 <div class="mobile-menu-wrapper hidden md:hidden">
   <!-- Mobile Bottom Navigation Bar -->
   <nav class="mobile-nav">
@@ -315,5 +344,9 @@
     }
   });
 </script>
+
+<!-- Scripts -->
+<script src="config.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
